@@ -4,6 +4,13 @@
         <hr />
         <p>{{{article.articleContent}}}</p>
         <hr />
-        <a href="/articles" class="btn btn-primary">Go Back</a>
+        
+        <div class="text-center">
+            <a href="/articles" class="btn btn-primary">Go Back</a>
+            {{#if session.user}}
+                <a class="btn btn-success" href="/article/{{article.articleId}}">Update</a>
+                <a class="btn btn-danger" href="/articles/delete/{{article.articleId}}">Remove</a>
+            {{/if}}
+        </div>
     </div>
 </div>

@@ -12,6 +12,14 @@ var userSchema = new Schema({
     "loginHistory": [{
         "dateTime": Date,
         "userAgent": String,
+    }],
+    "readArticleCount": {
+        "type": Number,
+        "default": 0
+    },
+    "favoriteArticles": [{
+        "type": Schema.Types.ObjectId,
+        "ref": "Article"
     }]
 });
 

@@ -17,8 +17,6 @@
                     <tr>
                         {{!-- <td class="text-center">{{articleId}}</td> --}}
                         <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
-                        <td><a class="btn btn-primary pull-right" href="/article/{{articleId}}">Update</a></td>
-                        <td><a class="btn btn-danger" href="/articles/delete/{{articleId}}">Remove</a></td> 
                     </tr>
                     {{/each}}
                 </tbody>
@@ -30,5 +28,8 @@
             <strong>{{message}}</strong>
         </div>
     {{/unless}}
+    <hr />
+    <div class="col-md-12 text-center">
+        <p><strong>Total:</strong> {{articles.length}}</p>
     </div>
 </div>

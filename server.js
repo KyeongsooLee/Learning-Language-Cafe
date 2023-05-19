@@ -94,7 +94,7 @@ app.get("/images/add", ensureLogin, (req,res) => {
     res.render("addImage"); 
 }); 
 
-app.get("/articles", ensureLogin, function(req, res){
+app.get("/articles", function(req, res){
     dataService.getArticles()
     .then((data) => {
         if (data.length > 0) {
@@ -131,7 +131,7 @@ app.get("/article/:articleId", ensureLogin, (req, res) => {
     });
 });
 
-app.get("/article/reading/:articleId", ensureLogin, function(req, res){
+app.get("/article/reading/:articleId", function(req, res){
     dataService.getArticleById(req.params.articleId)
     .then((data) => {
         if (data) {
