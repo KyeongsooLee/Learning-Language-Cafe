@@ -17,9 +17,9 @@ var userSchema = new Schema({
         "type": Number,
         "default": 0
     },
+    "finishReadingArticles": [String],
     "favoriteArticles": [{
-        "type": Schema.Types.ObjectId,
-        "ref": "Article"
+        "favoriteArticleId": String,
     }]
 });
 
@@ -100,4 +100,41 @@ module.exports.checkUser = function (userData) {
             reject("Unable to find user: " + userData.userName);
         });
     });
+}
+
+
+module.exports.updateMarkAsReadArticle = function (articleId, userData) {
+    return new Promise((resolve, reject) => {
+        addToUniqueArray(userData.finishReadingArticles, articleId);
+        console.log(userData.finishReadingArticles);
+        userData.readArticleCount = printNumbers(userData.finishReadingArticles);
+        User.updateMany(
+            { userName: userData.userName },
+            { $set: {
+                readArticleCount: userData.readArticleCount, 
+                finishReadingArticles: userData.finishReadingArticles
+            }}
+        )
+        .exec()
+        .then(() => {
+            resolve(userData);
+        })
+        .catch((err) => {
+            reject("There was an error updating the user: " + err);
+        });
+    });
+}
+
+
+function addToUniqueArray(array, number) {
+    if (!array.includes(number)) {
+      array.push(number);
+    }
+}
+
+function printNumbers(array) {
+    var count = 0;
+    for (var i = 0; i < array.length; i++) { count++; }
+    console.log("Total number: ", count);
+    return count;
 }

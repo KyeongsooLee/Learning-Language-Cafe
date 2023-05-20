@@ -10,6 +10,7 @@ var path = require("path");
 var static = require("serve-static");
 var clientSessions = require("client-sessions");
 var HTTP_PORT = process.env.PORT || 8080;
+
 require("dotenv").config();
 
 function onHttpStart(){
@@ -95,11 +96,22 @@ app.get("/images/add", ensureLogin, (req,res) => {
 }); 
 
 app.get("/articles", function(req, res){
+    let viewData = {};
     dataService.getArticles()
     .then((data) => {
-        if (data.length > 0) {
-            console.log(data[0].articleTitle);
-            res.render("articles", {articles: data});
+        viewData.articles = data;
+        if (req.session.user) {
+            viewData.finishReadingArticles = req.session.user.finishReadingArticles;
+            for (let i = 0; i < viewData.articles.length; i++) {
+                for (let j = 0; j < viewData.finishReadingArticles.length; j++) {
+                    if (viewData.articles[i].articleId == viewData.finishReadingArticles[j]) {
+                        viewData.articles[i].selected = true;
+                    }
+                }
+            }
+        }
+        if (viewData.articles.length > 0) {
+            res.render("articles", {viewData: viewData});
         }
         else{
             res.render("articles", {message: "no results"});
@@ -180,6 +192,16 @@ app.post("/article/update", ensureLogin, (req, res) => {
         res.status(500).send("unable to update article");
     });
 });
+
+app.post("/article/markAsRead/:articleId", ensureLogin, (req, res) => {
+    dataServiceAuth.updateMarkAsReadArticle(req.params.articleId, req.session.user)
+    .then(() => {
+        res.redirect("/articles");
+    })
+    .catch(() => {
+        res.status(500).send("unable to update article");
+    });
+});
 ////////////////////////////////////////////////////////
 app.get("/login", (req, res) => {
     res.render("login");
@@ -205,7 +227,10 @@ app.post("/login", (req, res) => {
         req.session.user = {
             userName: user.userName, // authenticated user's userName
             email: user.email, // authenticated user's email
-            loginHistory: user.loginHistory // authenticated user's loginHistory
+            loginHistory: user.loginHistory, // authenticated user's loginHistory     
+            readArticleCount: user.readArticleCount,
+            finishReadingArticles: user.finishReadingArticles,
+            favoriteArticles: user.favoriteArticles
         }
         res.redirect('/');
     })

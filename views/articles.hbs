@@ -10,16 +10,36 @@
                     <tr>
                         {{!-- <th class="text-center">No</th> --}}
                         <th class="text-center">Topic</th>
+                        <th class="text-center">Status</th>
                     </tr>
                 </thead>
+                {{#if session.user}}
                 <tbody>
-                    {{#each articles}}
+                    {{#each viewData.articles}}
                     <tr>
                         {{!-- <td class="text-center">{{articleId}}</td> --}}
                         <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
+                        {{#if selected}}
+                            <td class="text-center"><span class="badge badge-success">Read</span></td>
+                        {{else}}
+                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
+                        {{/if}}
                     </tr>
                     {{/each}}
                 </tbody>
+                {{else}}
+                    {{#each viewData.articles}}
+                    <tr>
+                        <td class="text-center">{{articleId}}</td>
+                        <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
+                        {{#if selected}}
+                            <td class="text-center"><span class="badge badge-success">Read</span></td>
+                        {{else}}
+                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
+                        {{/if}}
+                    </tr>
+                    {{/each}}
+                {{/if}}
             </table>
         </div>
     </div>
@@ -30,6 +50,6 @@
     {{/unless}}
     <hr />
     <div class="col-md-12 text-center">
-        <p><strong>Total:</strong> {{articles.length}}</p>
+        <p><strong>Total:</strong> {{viewData.articles.length}}</p>
     </div>
 </div>

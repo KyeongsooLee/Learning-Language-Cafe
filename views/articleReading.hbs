@@ -10,6 +10,12 @@
             {{#if session.user}}
                 <a class="btn btn-success" href="/article/{{article.articleId}}">Update</a>
                 <a class="btn btn-danger" href="/articles/delete/{{article.articleId}}">Remove</a>
+                <form action="/article/markAsRead/{{article.articleId}}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-info">Mark as Read</button>
+                </form>
+                {{!-- <form action="/article/like/{{article.articleId}}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-warning">Like</button>
+                </form> --}}
             {{/if}}
         </div>
     </div>
