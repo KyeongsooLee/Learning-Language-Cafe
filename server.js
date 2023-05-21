@@ -102,10 +102,16 @@ app.get("/articles", function(req, res){
         viewData.articles = data;
         if (req.session.user) {
             viewData.finishReadingArticles = req.session.user.finishReadingArticles;
+            viewData.favoriteArticles = req.session.user.favoriteArticles;
             for (let i = 0; i < viewData.articles.length; i++) {
                 for (let j = 0; j < viewData.finishReadingArticles.length; j++) {
                     if (viewData.articles[i].articleId == viewData.finishReadingArticles[j]) {
                         viewData.articles[i].selected = true;
+                    }
+                }
+                for (let j = 0; j < viewData.favoriteArticles.length; j++) {
+                    if (viewData.articles[i].articleId == viewData.favoriteArticles[j]) {
+                        viewData.articles[i].liked = true;
                     }
                 }
             }
@@ -196,7 +202,17 @@ app.post("/article/update", ensureLogin, (req, res) => {
 app.post("/article/markAsRead/:articleId", ensureLogin, (req, res) => {
     dataServiceAuth.updateMarkAsReadArticle(req.params.articleId, req.session.user)
     .then(() => {
-        res.redirect("/articles");
+        res.redirect(`/article/reading/${req.params.articleId}`);
+    })
+    .catch(() => {
+        res.status(500).send("unable to update article");
+    });
+});
+
+app.post("/article/like/:articleId", ensureLogin, (req, res) => {
+    dataServiceAuth.updateLikeArticle(req.params.articleId, req.session.user)
+    .then(() => {
+        res.redirect(`/article/reading/${req.params.articleId}`);
     })
     .catch(() => {
         res.status(500).send("unable to update article");

@@ -18,9 +18,7 @@ var userSchema = new Schema({
         "default": 0
     },
     "finishReadingArticles": [String],
-    "favoriteArticles": [{
-        "favoriteArticleId": String,
-    }]
+    "favoriteArticles": [String],
 });
 
 let User; // to be defined on new connection (see initialize)
@@ -113,6 +111,26 @@ module.exports.updateMarkAsReadArticle = function (articleId, userData) {
             { $set: {
                 readArticleCount: userData.readArticleCount, 
                 finishReadingArticles: userData.finishReadingArticles
+            }}
+        )
+        .exec()
+        .then(() => {
+            resolve(userData);
+        })
+        .catch((err) => {
+            reject("There was an error updating the user: " + err);
+        });
+    });
+}
+
+module.exports.updateLikeArticle = function (articleId, userData) {
+    return new Promise((resolve, reject) => {
+        addToUniqueArray(userData.favoriteArticles, articleId);
+        console.log(userData.favoriteArticles);
+        User.updateOne(
+            { userName: userData.userName },
+            { $set: {
+                favoriteArticles: userData.favoriteArticles
             }}
         )
         .exec()

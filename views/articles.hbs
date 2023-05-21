@@ -11,6 +11,7 @@
                         {{!-- <th class="text-center">No</th> --}}
                         <th class="text-center">Topic</th>
                         <th class="text-center">Status</th>
+                        <th class="text-center">Like</th>
                     </tr>
                 </thead>
                 {{#if session.user}}
@@ -24,21 +25,29 @@
                         {{else}}
                             <td class="text-center"><span class="badge badge-danger">Unread</span></td>
                         {{/if}}
+                        {{#if liked}}
+                            <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
+                        {{else}}
+                            <td class="text-center">&nbsp;</td>
+                        {{/if}}
                     </tr>
                     {{/each}}
                 </tbody>
                 {{else}}
+                <tbody>
                     {{#each viewData.articles}}
                     <tr>
-                        <td class="text-center">{{articleId}}</td>
+                        {{!-- <td class="text-center">{{articleId}}</td> --}}
                         <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
                         {{#if selected}}
                             <td class="text-center"><span class="badge badge-success">Read</span></td>
                         {{else}}
                             <td class="text-center"><span class="badge badge-danger">Unread</span></td>
                         {{/if}}
+                        <td class="text-center">&nbsp;</td>
                     </tr>
                     {{/each}}
+                </tbody> 
                 {{/if}}
             </table>
         </div>
