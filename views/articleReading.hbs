@@ -1,21 +1,51 @@
 <div class="row">
     <div class="col-md-12">
-        <h2>{{article.articleTitle}}</h2>
+        <h2>{{viewData.article.articleTitle}}
+            <a class="btn btn-success pull-right" href="/article/{{article.articleId}}">Update</a>
+        </h2>
         <hr />
-        <p>{{{article.articleContent}}}</p>
+        <p>{{{viewData.article.articleContent}}}</p>
         <hr />
         
         <div class="text-center">
             <a href="/articles" class="btn btn-primary">Go Back</a>
-            {{#if session.user}}
-                <a class="btn btn-success" href="/article/{{article.articleId}}">Update</a>
-                <a class="btn btn-danger" href="/articles/delete/{{article.articleId}}">Remove</a>
-                <form action="/article/markAsRead/{{article.articleId}}" method="POST" style="display:inline;">
+            {{!-- {{#if session.user}}
+                <form action="/article/markAsRead/{{viewData.article.articleId}}" method="POST" style="display:inline;">
+                {{#if viewData.article.selected}}
+                    <button type="submit" class="btn btn-info-inverse">Mark as Read</button>
+                {{else}}
                     <button type="submit" class="btn btn-info">Mark as Read</button>
                 </form>
-                <form action="/article/like/{{article.articleId}}" method="POST" style="display:inline;">
+                {{/if}}
+                <form action="/article/like/{{viewData.article.articleId}}" method="POST" style="display:inline;">
+                {{#if viewData.article.liked}}
+                    <button type="submit" class="btn btn-warning-inverse">Like</button>
+                {{else}}
                     <button type="submit" class="btn btn-warning">Like</button>
+                {{/if}}
                 </form>
+                <a class="btn btn-danger pull-right" href="/articles/delete/{{article.articleId}}">Remove</a>
+            {{/if}} --}}
+            {{#if session.user}}
+                <form action="/article/action/{{viewData.article.articleId}}" method="POST" style="display:inline;">
+                    {{#if viewData.article.selected}}
+                        <input type="hidden" name="action" value="markAsRead">
+                        <button type="submit" class="btn btn-info-inverse">Mark as Read</button>
+                    {{else}}
+                        <input type="hidden" name="action" value="markAsRead">
+                        <button type="submit" class="btn btn-info">Mark as Read</button>
+                    {{/if}}
+                </form>
+                <form action="/article/action/{{viewData.article.articleId}}" method="POST" style="display:inline;">
+                    {{#if viewData.article.liked}}
+                        <input type="hidden" name="action" value="like">
+                        <button type="submit" class="btn btn-warning-inverse">Like</button>
+                    {{else}}
+                        <input type="hidden" name="action" value="like">
+                        <button type="submit" class="btn btn-warning">Like</button>
+                    {{/if}}
+                </form>
+                <a class="btn btn-danger pull-right" href="/articles/delete/{{article.articleId}}">Remove</a>
             {{/if}}
         </div>
     </div>

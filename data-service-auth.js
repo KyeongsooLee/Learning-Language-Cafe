@@ -103,8 +103,8 @@ module.exports.checkUser = function (userData) {
 
 module.exports.updateMarkAsReadArticle = function (articleId, userData) {
     return new Promise((resolve, reject) => {
-        addToUniqueArray(userData.finishReadingArticles, articleId);
-        console.log(userData.finishReadingArticles);
+        addOrDeleteToUniqueArray(userData.finishReadingArticles, articleId);
+        console.log("Finish Reading Articles: ", userData.finishReadingArticles);
         userData.readArticleCount = printNumbers(userData.finishReadingArticles);
         User.updateMany(
             { userName: userData.userName },
@@ -125,8 +125,8 @@ module.exports.updateMarkAsReadArticle = function (articleId, userData) {
 
 module.exports.updateLikeArticle = function (articleId, userData) {
     return new Promise((resolve, reject) => {
-        addToUniqueArray(userData.favoriteArticles, articleId);
-        console.log(userData.favoriteArticles);
+        addOrDeleteToUniqueArray(userData.favoriteArticles, articleId);
+        console.log("Liked: ", userData.favoriteArticles);
         User.updateOne(
             { userName: userData.userName },
             { $set: {
@@ -144,9 +144,14 @@ module.exports.updateLikeArticle = function (articleId, userData) {
 }
 
 
-function addToUniqueArray(array, number) {
+function addOrDeleteToUniqueArray(array, number) {
     if (!array.includes(number)) {
       array.push(number);
+    } else {
+      const index = array.indexOf(number);
+      if (index !== -1) {
+        array.splice(index, 1);
+      }
     }
 }
 

@@ -14,7 +14,7 @@ var HTTP_PORT = process.env.PORT || 8080;
 require("dotenv").config();
 
 function onHttpStart(){
-    console.log("Express http server listening on " + HTTP_PORT);
+    console.log("Express http server listening on http://localhost:" + HTTP_PORT);
 }
 
 app.use(clientSessions({
@@ -150,11 +150,27 @@ app.get("/article/:articleId", ensureLogin, (req, res) => {
 });
 
 app.get("/article/reading/:articleId", function(req, res){
+    let viewData = {};
     dataService.getArticleById(req.params.articleId)
     .then((data) => {
+        viewData.article = data;
+        if (req.session.user) {
+            viewData.finishReadingArticles = req.session.user.finishReadingArticles;
+            viewData.favoriteArticles = req.session.user.favoriteArticles;
+            for (let j = 0; j < viewData.finishReadingArticles.length; j++) {
+                if (viewData.article.articleId == viewData.finishReadingArticles[j]) {
+                    viewData.article.selected = true;
+                }
+            }
+            for (let j = 0; j < viewData.favoriteArticles.length; j++) {
+                if (viewData.article.articleId == viewData.favoriteArticles[j]) {
+                    viewData.article.liked = true;
+                }
+            }
+        }
         if (data) {
             res.render("articleReading", {
-                article: data
+                viewData: viewData
             });
         }
         else{
@@ -199,24 +215,48 @@ app.post("/article/update", ensureLogin, (req, res) => {
     });
 });
 
-app.post("/article/markAsRead/:articleId", ensureLogin, (req, res) => {
-    dataServiceAuth.updateMarkAsReadArticle(req.params.articleId, req.session.user)
-    .then(() => {
-        res.redirect(`/article/reading/${req.params.articleId}`);
-    })
-    .catch(() => {
-        res.status(500).send("unable to update article");
-    });
-});
+// app.post("/article/markAsRead/:articleId", ensureLogin, (req, res) => {
+//     console.log("Call MarkAsRead");
+//     dataServiceAuth.updateMarkAsReadArticle(req.params.articleId, req.session.user)
+//     .then(() => {
+//         res.redirect(`/article/reading/${req.params.articleId}`);
+//     })
+//     .catch(() => {
+//         res.status(500).send("unable to update article");
+//     });
+// });
 
-app.post("/article/like/:articleId", ensureLogin, (req, res) => {
-    dataServiceAuth.updateLikeArticle(req.params.articleId, req.session.user)
-    .then(() => {
-        res.redirect(`/article/reading/${req.params.articleId}`);
-    })
-    .catch(() => {
-        res.status(500).send("unable to update article");
-    });
+// app.post("/article/like/:articleId", ensureLogin, (req, res) => {
+//     console.log("Call Like!");
+//     dataServiceAuth.updateLikeArticle(req.params.articleId, req.session.user)
+//     .then(() => {
+//         res.redirect(`/article/reading/${req.params.articleId}`);
+//     })
+//     .catch(() => {
+//         res.status(500).send("unable to update article");
+//     });
+// });
+
+app.post("/article/action/:articleId", ensureLogin, (req, res) => {
+    const action = req.body.action;
+    console.log(`Call ${action}!`);
+
+    let promise;
+    if (action === 'markAsRead') {
+        promise = dataServiceAuth.updateMarkAsReadArticle(req.params.articleId, req.session.user);
+    } else if (action === 'like') {
+        promise = dataServiceAuth.updateLikeArticle(req.params.articleId, req.session.user);
+    } else {
+        return res.status(400).send("Unknown action");
+    }
+
+    promise
+        .then(() => {
+            res.redirect(`/article/reading/${req.params.articleId}`);
+        })
+        .catch(() => {
+            res.status(500).send("Unable to update article");
+        });
 });
 ////////////////////////////////////////////////////////
 app.get("/login", (req, res) => {
