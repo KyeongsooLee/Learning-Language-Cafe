@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <h2>{{viewData.article.articleTitle}}
-            <a class="btn btn-success pull-right" href="/article/{{article.articleId}}">Update</a>
+            <a class="btn btn-success pull-right" href="/article/{{viewData.article.articleId}}">Update</a>
         </h2>
         <hr />
         <p>{{{viewData.article.articleContent}}}</p>
@@ -45,7 +45,7 @@
                         <button type="submit" class="btn btn-warning">Like</button>
                     {{/if}}
                 </form>
-                <a class="btn btn-danger pull-right" href="/articles/delete/{{article.articleId}}">Remove</a>
+                <a class="btn btn-danger pull-right" href="/articles/delete/{{viewData.article.articleId}}">Remove</a>
             {{/if}}
         </div>
     </div>
