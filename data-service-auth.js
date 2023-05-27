@@ -19,6 +19,14 @@ var userSchema = new Schema({
     },
     "finishReadingArticles": [String],
     "favoriteArticles": [String],
+    "level": {
+        "type": Number,
+        "default": 1
+    },
+    "exp": {
+        "type": Number,
+        "default": 0
+    }
 });
 
 let User; // to be defined on new connection (see initialize)
@@ -104,13 +112,18 @@ module.exports.checkUser = function (userData) {
 module.exports.updateMarkAsReadArticle = function (articleId, userData) {
     return new Promise((resolve, reject) => {
         addOrDeleteToUniqueArray(userData.finishReadingArticles, articleId);
+        console.log("Level: ", userData.level, "Exp: ", userData.exp);
+        let updatedUserData = increaseExp(userData.level, userData.exp);
+        console.log("Level: ", updatedUserData.level, "Exp: ", updatedUserData.exp);
         console.log("Finish Reading Articles: ", userData.finishReadingArticles);
         userData.readArticleCount = printNumbers(userData.finishReadingArticles);
         User.updateMany(
             { userName: userData.userName },
             { $set: {
                 readArticleCount: userData.readArticleCount, 
-                finishReadingArticles: userData.finishReadingArticles
+                finishReadingArticles: userData.finishReadingArticles,
+                level: updatedUserData.level,
+                exp: updatedUserData.exp
             }}
         )
         .exec()
@@ -160,4 +173,16 @@ function printNumbers(array) {
     for (var i = 0; i < array.length; i++) { count++; }
     console.log("Total number: ", count);
     return count;
+}
+
+function increaseExp(userLevel, userExp) {
+    let newExp = userExp + 37;
+    let newLevel = userLevel;
+  
+    if (newExp >= 100) {
+      newExp = newExp - 100;
+      newLevel = userLevel + 1;
+    }
+    
+    return { level: newLevel, exp: newExp };
 }

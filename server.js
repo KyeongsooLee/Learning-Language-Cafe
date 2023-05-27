@@ -116,6 +116,8 @@ app.get("/articles", function(req, res){
                 }
             }
         }
+        viewData.level = req.session.user.level;
+        viewData.exp = req.session.user.exp;
         if (viewData.articles.length > 0) {
             res.render("articles", {viewData: viewData});
         }
@@ -286,7 +288,9 @@ app.post("/login", (req, res) => {
             loginHistory: user.loginHistory, // authenticated user's loginHistory     
             readArticleCount: user.readArticleCount,
             finishReadingArticles: user.finishReadingArticles,
-            favoriteArticles: user.favoriteArticles
+            favoriteArticles: user.favoriteArticles,
+            level: user.level,
+            exp: user.exp,
         }
         res.redirect('/');
     })
