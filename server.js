@@ -115,11 +115,12 @@ app.get("/articles", function(req, res){
                     }
                 }
             }
+            viewData.level = req.session.user.level;
+            viewData.exp = req.session.user.exp;
         }
         console.log("favoriteArticles: ", req.session.user.finishReadingArticles);
         console.log("articles page exp: ", req.session.user.exp);
-        viewData.level = req.session.user.level;
-        viewData.exp = req.session.user.exp;
+
         if (viewData.articles.length > 0) {
             res.render("articles", {viewData: viewData});
         }
