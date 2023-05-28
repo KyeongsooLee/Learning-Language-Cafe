@@ -116,6 +116,8 @@ app.get("/articles", function(req, res){
                 }
             }
         }
+        console.log("favoriteArticles: ", req.session.user.finishReadingArticles);
+        console.log("articles page exp: ", req.session.user.exp);
         viewData.level = req.session.user.level;
         viewData.exp = req.session.user.exp;
         if (viewData.articles.length > 0) {

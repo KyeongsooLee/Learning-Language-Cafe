@@ -111,10 +111,24 @@ module.exports.checkUser = function (userData) {
 
 module.exports.updateMarkAsReadArticle = function (articleId, userData) {
     return new Promise((resolve, reject) => {
-        addOrDeleteToUniqueArray(userData.finishReadingArticles, articleId);
-        console.log("Level: ", userData.level, "Exp: ", userData.exp);
-        let updatedUserData = increaseExp(userData.level, userData.exp);
-        console.log("Level: ", updatedUserData.level, "Exp: ", updatedUserData.exp);
+        let increaseExp = false;
+        console.log("before Exp: ", userData.exp);
+        increaseExp = addOrDeleteToUniqueArray(userData.finishReadingArticles, articleId);
+        console.log("increaseExp: ", increaseExp);
+        if(increaseExp){
+            console.log("increaseExp: ", increaseExp);
+            const { userLevel, userExp } = upExp(userData.level, userData.exp);
+            userData.level = userLevel;
+            userData.exp = userExp;
+            console.log("increaseExp: ", increaseExp);
+        } else {
+            console.log("increaseExp: ", increaseExp);
+            const { userLevel, userExp } = downExp(userData.level, userData.exp);
+            userData.level = userLevel;
+            userData.exp = userExp;
+            console.log("increaseExp: ", increaseExp);
+        }
+        console.log("after Exp: ", userData.exp);
         console.log("Finish Reading Articles: ", userData.finishReadingArticles);
         userData.readArticleCount = printNumbers(userData.finishReadingArticles);
         User.updateMany(
@@ -122,8 +136,8 @@ module.exports.updateMarkAsReadArticle = function (articleId, userData) {
             { $set: {
                 readArticleCount: userData.readArticleCount, 
                 finishReadingArticles: userData.finishReadingArticles,
-                level: updatedUserData.level,
-                exp: updatedUserData.exp
+                level: userData.level,
+                exp: userData.exp
             }}
         )
         .exec()
@@ -158,14 +172,18 @@ module.exports.updateLikeArticle = function (articleId, userData) {
 
 
 function addOrDeleteToUniqueArray(array, number) {
+    let increaseExp = false;
     if (!array.includes(number)) {
       array.push(number);
+      increaseExp = true;
     } else {
       const index = array.indexOf(number);
       if (index !== -1) {
         array.splice(index, 1);
       }
     }
+
+    return increaseExp;
 }
 
 function printNumbers(array) {
@@ -175,8 +193,8 @@ function printNumbers(array) {
     return count;
 }
 
-function increaseExp(userLevel, userExp) {
-    let newExp = userExp + 37;
+function upExp(userLevel, userExp) {
+    let newExp = userExp + 25;
     let newLevel = userLevel;
   
     if (newExp >= 100) {
@@ -184,5 +202,17 @@ function increaseExp(userLevel, userExp) {
       newLevel = userLevel + 1;
     }
     
-    return { level: newLevel, exp: newExp };
+    return { userLevel: newLevel, userExp: newExp };
+}
+
+function downExp(userLevel, userExp) {
+    let newExp = userExp - 25;
+    let newLevel = userLevel;
+  
+    if (newExp < 0) {
+      newExp = newExp + 100;
+      newLevel = userLevel - 1;
+    }
+    
+    return { userLevel: newLevel, userExp: newExp };
 }
