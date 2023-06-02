@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{record.recordTitle}} - Record: {{record.recordId}}</h2>
+        <hr />
+        <form method="post" action="/record/update">
+            <input id="recordId" name="recordId" type="hidden" value="{{record.recordId}}" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="recordTitle">Record Title</label>
+                        <input class="form-control" id="recordTitle" name="recordTitle" type="text" value="{{record.recordTitle}}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="recordContent">Record Content</label>
+                        <textarea class="form-control" rows="18" id="recordContent" name="recordContent" type="text">{{{record.recordContent}}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <input type="submit" class="btn btn-primary pull-right" value="Update Record" /><br /><br /><br />
+        </form>
+    </div>
+</div>

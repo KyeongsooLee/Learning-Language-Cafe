@@ -22,6 +22,17 @@ const Article = sequelize.define('Article', {
     articleContent: Sequelize.TEXT,
 });
 
+const Record = sequelize.define('Record', {
+    recordId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    recordTitle: Sequelize.STRING,
+    recordContent: Sequelize.TEXT,
+    userName: Sequelize.STRING,
+});
+
 module.exports.initialize = function() {
     return new Promise(function (resolve, reject) {
         sequelize.sync()    
@@ -145,6 +156,104 @@ module.exports.deleteArticleById = function (id) {
         })
         .catch(() => {
             reject("Unable to delete article.");
+        });
+    });
+};
+
+module.exports.getRecords = function() {
+    return new Promise(function (resolve, reject) {
+        Record.findAll()
+        .then((data) => {
+            resolve(data);
+        })
+        .catch(() => {
+            reject("no results returned");
+        });
+    });
+};
+
+module.exports.addRecord = function (recordData, userData) {
+    return new Promise(function (resolve, reject) {
+        for (const prop in recordData) {
+            if (recordData[prop] == "")
+                recordData[prop] = null;
+        };
+        recordData.recordContent = recordData.recordContent.replace(/\n/g, "<br>");
+        Record.create({
+            recordId: recordData.recordId,
+            recordTitle: recordData.recordTitle,
+            recordContent: recordData.recordContent,
+            userName: userData.userName,
+        })
+        .then(() => {
+            resolve("New record created successfully");
+        })
+        .catch(() => {
+            reject("unable to create record");
+        });
+    });
+};
+
+module.exports.getRecordById = function (id) {
+    return new Promise(function (resolve, reject) {
+        Record.findAll({ 
+            where: {
+                recordId: id
+            }
+        })
+        .then((data) => {
+            resolve(data[0]);
+        })
+        .catch(() => {
+            reject("no results returned");
+        });
+    });
+};
+
+module.exports.getUpdateRecordById = function (id) {
+    return new Promise(function (resolve, reject) {
+        Record.findAll({ 
+            where: {
+                recordId: id
+            }
+        })
+        .then((records) => {
+            const recordData = records[0];
+            if (recordData) {
+                recordData.recordContent = recordData.recordContent.replace(/<br>/g, "\n");
+                resolve(recordData);
+            } else {
+                reject("no results returned");
+            }
+        })
+        .catch(() => {
+            reject("no results returned");
+        });
+    });
+};
+
+module.exports.updateRecord = function (recordData) {
+    return new Promise(function (resolve, reject) {
+        for (const prop in recordData) {
+            if (recordData[prop] == "")
+                recordData[prop] = null;
+        };
+        recordData.recordContent = recordData.recordContent.replace(/\n/g, "<br>");
+        Record.update({
+            recordId: recordData.recordId,
+            recordTitle: recordData.recordTitle,
+            recordContent: recordData.recordContent,
+        },
+        {
+            where: {
+                recordId: recordData.recordId
+            }
+        })
+        .then(() => {
+            resolve("Record updated successfully");
+        })
+        .catch(() => {
+            reject("unable to update Record");
         });
     });
 };

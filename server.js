@@ -194,6 +194,72 @@ app.get("/articles/delete/:articleId", ensureLogin, (req, res) => {
             res.status(500).send("Unable to Remove Article / Article not found");
         });
 });
+
+app.get("/dailyrecord", function(req, res){
+    let viewData = {};
+    dataService.getRecords()
+    .then((data) => {
+        viewData.records = data;
+        console.log(viewData.records[0].updatedAt)
+        for(let i = 0; i < viewData.records.length ; i++) {
+            const date = new Date(viewData.records[i].updatedAt)
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const formattedUpdatedAt = `${year}/${month}/${day}`;
+            viewData.records[i].updatedAt = formattedUpdatedAt;
+        }
+        if (viewData.records.length > 0) {
+            res.render("dailyrecord", {viewData: viewData});
+        }
+        else{
+            res.render("dailyrecord", {message: "no results"});
+        }
+    })
+    .catch((err) => {
+        res.render("dailyrecord", {message: "unable to get dailyrecord"});
+    })
+});
+
+app.get("/dailyrecord/add", ensureLogin, function(req, res) {
+    res.render("addRecord");
+})
+
+app.get("/record/reading/:recordId", function(req, res){
+    let viewData = {};
+    dataService.getRecordById(req.params.recordId)
+    .then((data) => {
+        viewData.record = data;
+        if (data) {
+            res.render("recordReading", {
+                viewData: viewData
+            });
+        }
+        else{
+            res.status(404).send("Record Not Found");
+        }
+    })
+    .catch(() => {
+        res.status(404).send("Record Not Found");
+    });
+});
+
+app.get("/record/:recordId", ensureLogin, (req, res) => {
+    dataService.getUpdateRecordById(req.params.recordId)
+    .then((data) => {
+        if (data) {
+            res.render("updateRecord", {
+                record: data
+            });
+        }
+        else{
+            res.status(404).send("Record Not Found");
+        }
+    })
+    .catch(() => {
+        res.status(404).send("Record Not Found");
+    });
+});
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
     dataService.addArticle(req.body)
@@ -261,6 +327,26 @@ app.post("/article/action/:articleId", ensureLogin, (req, res) => {
         .catch(() => {
             res.status(500).send("Unable to update article");
         });
+});
+
+app.post("/records/add", ensureLogin, (req, res) => {
+    dataService.addRecord(req.body, req.session.user)
+    .then(() => {
+        res.redirect("/dailyrecord");
+    })
+    .catch(() => {
+        res.status(500).send("unable to add record");
+    });
+});
+
+app.post("/record/update", ensureLogin, (req, res) => {
+    dataService.updateRecord(req.body)
+    .then(() => {
+        res.redirect("/dailyrecord");
+    })
+    .catch(() => {
+        res.status(500).send("unable to update record");
+    });
 });
 ////////////////////////////////////////////////////////
 app.get("/login", (req, res) => {
