@@ -260,6 +260,15 @@ app.get("/record/:recordId", ensureLogin, (req, res) => {
         res.status(404).send("Record Not Found");
     });
 });
+
+app.get("/record/delete/:recordId", ensureLogin, (req, res) => {
+    dataService.deleteRecordById(req.params.recordId)
+        .then(() => {
+            res.redirect("/dailyrecord");
+        }).catch(() => {
+            res.status(500).send("Unable to Remove Record / Record not found");
+        });
+});
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
     dataService.addArticle(req.body)

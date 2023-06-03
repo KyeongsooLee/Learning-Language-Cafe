@@ -257,3 +257,19 @@ module.exports.updateRecord = function (recordData) {
         });
     });
 };
+
+module.exports.deleteRecordById = function (id) {
+    return new Promise(function (resolve, reject) {
+        Record.destroy({    
+            where: {                
+                recordId: id
+            }        
+        })        
+        .then(() => {  
+            resolve("destroyed");
+        })
+        .catch(() => {
+            reject("Unable to delete record.");
+        });
+    });
+};

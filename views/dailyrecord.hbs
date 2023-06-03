@@ -32,12 +32,8 @@
                     <tr>
                         {{!-- <td class="text-center">{{articleId}}</td> --}}
                         <td class="text-center"><a href="/record/reading/{{recordId}}">{{recordTitle}}</td>
-                        {{!-- {{#if selected}}
-                            <td class="text-center"><span class="badge badge-success">Read</span></td>
-                        {{else}}
-                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
-                        {{/if}} --}}
-                        <td class="text-center">&nbsp;</td>
+                        <td class="text-center"><span class="badge badge-success">{{userName}}</span></td>
+                        <td class="text-center"><span class="badge badge-warning">{{updatedAt}}</span></td>
                     </tr>
                     {{/each}}
                 </tbody> 
