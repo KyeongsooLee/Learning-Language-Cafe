@@ -120,7 +120,6 @@ app.get("/articles", function(req, res){
             viewData.exp = req.session.user.exp;
         }
         if (viewData.articles.length > 0) {
-            console.log("TEST", viewData.articles);
             res.render("articles", {viewData: viewData});
         }
         else{
@@ -200,14 +199,14 @@ app.get("/dailyrecord", function(req, res){
     dataService.getRecords()
     .then((data) => {
         viewData.records = data;
-        console.log(viewData.records[0].updatedAt)
+        console.log(viewData.records[0].createdAt)
         for(let i = 0; i < viewData.records.length ; i++) {
-            const date = new Date(viewData.records[i].updatedAt)
+            const date = new Date(viewData.records[i].createdAt)
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
-            const formattedUpdatedAt = `${year}/${month}/${day}`;
-            viewData.records[i].updatedAt = formattedUpdatedAt;
+            const formattedCreatedAt = `${year}/${month}/${day}`;
+            viewData.records[i].createdAt = formattedCreatedAt;
         }
         if (viewData.records.length > 0) {
             res.render("dailyrecord", {viewData: viewData});

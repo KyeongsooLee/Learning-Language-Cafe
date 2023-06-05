@@ -49,7 +49,9 @@ module.exports.initialize = function() {
 
 module.exports.getArticles = function() {
     return new Promise(function (resolve, reject) {
-        Article.findAll()
+        Article.findAll({
+            order: [['articleId', 'ASC']] // Sort articles in ascending order by articleId
+        })
         .then((data) => {
             resolve(data);
         })
@@ -162,7 +164,9 @@ module.exports.deleteArticleById = function (id) {
 
 module.exports.getRecords = function() {
     return new Promise(function (resolve, reject) {
-        Record.findAll()
+        Record.findAll({
+            order: [['recordId', 'ASC']] // Sort articles in ascending order by recordId
+        })
         .then((data) => {
             resolve(data);
         })
