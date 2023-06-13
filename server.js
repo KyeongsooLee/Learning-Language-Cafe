@@ -199,7 +199,6 @@ app.get("/dailyrecord", function(req, res){
     dataService.getRecords()
     .then((data) => {
         viewData.records = data;
-        console.log(viewData.records[0].createdAt)
         for(let i = 0; i < viewData.records.length ; i++) {
             const date = new Date(viewData.records[i].createdAt)
             const year = date.getFullYear();
