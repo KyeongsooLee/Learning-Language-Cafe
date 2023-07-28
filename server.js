@@ -267,6 +267,7 @@ app.get("/record/delete/:recordId", ensureLogin, (req, res) => {
             res.status(500).send("Unable to Remove Record / Record not found");
         });
 });
+
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
     dataService.addArticle(req.body)
