@@ -19,6 +19,8 @@ var userSchema = new Schema({
     },
     "finishReadingArticles": [String],
     "favoriteArticles": [String],
+    "finishReadingShortStories": [String],
+    "favoriteShortStories": [String],
     "level": {
         "type": Number,
         "default": 1

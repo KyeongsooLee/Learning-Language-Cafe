@@ -194,6 +194,42 @@ app.get("/articles/delete/:articleId", ensureLogin, (req, res) => {
         });
 });
 
+app.get("/shortstories", function(req, res){
+    let viewData = {};
+    dataService.getShortStories()
+    .then((data) => {
+        viewData.shortStories = data;
+        
+        if (req.session.user) {
+            viewData.finishReadingShortStories = req.session.user.finishReadingShortStories;
+            viewData.favoriteShortStories = req.session.user.favoriteShortStories;
+            for (let i = 0; i < viewData.shortStories.length; i++) {
+                for (let j = 0; j < viewData.finishReadingShortStories.length; j++) {
+                    if (viewData.shortStories[i].shortStoryId == viewData.finishReadingShortStories[j]) {
+                        viewData.shortStories[i].selected = true;
+                    }
+                }
+                for (let j = 0; j < viewData.favoriteShortStories.length; j++) {
+                    if (viewData.shortStories[i].shortStoryId == viewData.favoriteShortStories[j]) {
+                        viewData.shortStories[i].liked = true;
+                    }
+                }
+            }
+            viewData.level = req.session.user.level;
+            viewData.exp = req.session.user.exp;
+        }
+        if (viewData.shortStories.length > 0) {
+            res.render("shortstories", {viewData: viewData});
+        }
+        else{
+            res.render("shortstories", {message: "no results"});
+        }
+    })
+    .catch((err) => {
+        res.render("shortstories", {message: "unable to get shortStories"});
+    })
+});
+
 app.get("/dailyrecord", function(req, res){
     let viewData = {};
     dataService.getRecords()
@@ -385,6 +421,8 @@ app.post("/login", (req, res) => {
             readArticleCount: user.readArticleCount,
             finishReadingArticles: user.finishReadingArticles,
             favoriteArticles: user.favoriteArticles,
+            finishReadingShortStories: user.finishReadingShortStories,
+            favoriteShortStories: user.favoriteShortStories,
             level: user.level,
             exp: user.exp,
         }
