@@ -230,6 +230,43 @@ app.get("/shortstories", function(req, res){
     })
 });
 
+app.get("/shortstory/add", ensureLogin, function(req, res) {
+    res.render("addShortStory");
+});
+
+app.get("/shortstory/reading/:shortStoryId", function(req, res){
+    let viewData = {};
+    dataService.getShortStoryById(req.params.shortStoryId)
+    .then((data) => {
+        viewData.shortStory = data;
+        if (req.session.user) {
+            viewData.finishReadingShortStories = req.session.user.finishReadingShortStories;
+            viewData.favoriteShortStories = req.session.user.favoriteShortStories;
+            for (let j = 0; j < viewData.finishReadingShortStories.length; j++) {
+                if (viewData.shortStory.shortStoryId == viewData.finishReadingShortStories[j]) {
+                    viewData.shortStory.selected = true;
+                }
+            }
+            for (let j = 0; j < viewData.favoriteShortStories.length; j++) {
+                if (viewData.shortStory.shortStoryId == viewData.favoriteShortStories[j]) {
+                    viewData.shortStory.liked = true;
+                }
+            }
+        }
+        if (data) {
+            res.render("shortStoryReading", {
+                viewData: viewData
+            });
+        }
+        else{
+            res.status(404).send("Short Story Not Found");
+        }
+    })
+    .catch(() => {
+        res.status(404).send("Short Story Not Found");
+    });
+});
+
 app.get("/dailyrecord", function(req, res){
     let viewData = {};
     dataService.getRecords()
@@ -315,6 +352,16 @@ app.post("/articles/add", ensureLogin, (req, res) => {
     });
 });
 
+app.post("/shortStory/add", ensureLogin, (req, res) => {
+    dataService.addShortStory(req.body)
+    .then(() => {
+        res.redirect("/shortstories");
+    })
+    .catch(() => {
+        res.status(500).send("unable to add Short Story");
+    });
+});
+
 app.post("/images/add", upload.single("imageFile"), ensureLogin, (req, res) => {
     res.redirect("/images");
 });
@@ -373,6 +420,28 @@ app.post("/article/action/:articleId", ensureLogin, (req, res) => {
         });
 });
 
+app.post("/shortStory/action/:shortStoryId", ensureLogin, (req, res) => {
+    const action = req.body.action;
+    console.log(`Call ${action}!`);
+
+    let promise;
+    if (action === 'markAsRead') {
+        promise = dataServiceAuth.updateMarkAsReadShortStory(req.params.shortStoryId, req.session.user);
+    } else if (action === 'like') {
+        promise = dataServiceAuth.updateLikeShortStory(req.params.shortStoryId, req.session.user);
+    } else {
+        return res.status(400).send("Unknown action");
+    }
+
+    promise
+        .then(() => {
+            res.redirect(`/shortstory/reading/${req.params.shortStoryId}`);
+        })
+        .catch(() => {
+            res.status(500).send("Unable to update Short Story");
+        });
+});
+
 app.post("/records/add", ensureLogin, (req, res) => {
     dataService.addRecord(req.body, req.session.user)
     .then(() => {
@@ -419,6 +488,7 @@ app.post("/login", (req, res) => {
             email: user.email, // authenticated user's email
             loginHistory: user.loginHistory, // authenticated user's loginHistory     
             readArticleCount: user.readArticleCount,
+            readShortStoryCount: user.readShortStoryCount,
             finishReadingArticles: user.finishReadingArticles,
             favoriteArticles: user.favoriteArticles,
             finishReadingShortStories: user.finishReadingShortStories,

@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{viewData.shortStory.shortStoryTitle}}
+            <a class="btn btn-success pull-right" href="/shortStory/{{viewData.shortStory.shortStoryId}}">Update</a>
+        </h2>
+        <hr />
+        <p>{{{viewData.shortStory.shortStoryContent}}}</p>
+        <hr />
+        
+        <div class="text-center">
+            <a href="/shortStories" class="btn btn-primary">Go Back</a>
+            {{!-- {{#if session.user}}
+                <form action="/article/markAsRead/{{viewData.article.articleId}}" method="POST" style="display:inline;">
+                {{#if viewData.article.selected}}
+                    <button type="submit" class="btn btn-info-inverse">Mark as Read</button>
+                {{else}}
+                    <button type="submit" class="btn btn-info">Mark as Read</button>
+                </form>
+                {{/if}}
+                <form action="/article/like/{{viewData.article.articleId}}" method="POST" style="display:inline;">
+                {{#if viewData.article.liked}}
+                    <button type="submit" class="btn btn-warning-inverse">Like</button>
+                {{else}}
+                    <button type="submit" class="btn btn-warning">Like</button>
+                {{/if}}
+                </form>
+                <a class="btn btn-danger pull-right" href="/articles/delete/{{article.articleId}}">Remove</a>
+            {{/if}} --}}
+            {{#if session.user}}
+                <form action="/shortStory/action/{{viewData.shortStory.shortStoryId}}" method="POST" style="display:inline;">
+                    {{#if viewData.shortStory.selected}}
+                        <input type="hidden" name="action" value="markAsRead">
+                        <button type="submit" class="btn btn-info-inverse">Mark as Read</button>
+                    {{else}}
+                        <input type="hidden" name="action" value="markAsRead">
+                        <button type="submit" class="btn btn-info">Mark as Read</button>
+                    {{/if}}
+                </form>
+                <form action="/shortStory/action/{{viewData.shortStory.shortStoryId}}" method="POST" style="display:inline;">
+                    {{#if viewData.shortStory.liked}}
+                        <input type="hidden" name="action" value="like">
+                        <button type="submit" class="btn btn-warning-inverse">Like</button>
+                    {{else}}
+                        <input type="hidden" name="action" value="like">
+                        <button type="submit" class="btn btn-warning">Like</button>
+                    {{/if}}
+                </form>
+                {{!-- <a class="btn btn-danger pull-right" href="/articles/delete/{{viewData.article.articleId}}">Remove</a> --}}
+                <a class="btn btn-danger pull-right" href="/shortStory/delete/{{viewData.shortStory.shortStoryId}}" onclick="return confirmDelete('{{viewData.shortStory.shortStoryId}}')">Remove</a>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(shortStoryId) {
+        return confirm("Are you sure you want to remove this Short Story?");
+    }
+</script>

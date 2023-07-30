@@ -17,6 +17,10 @@ var userSchema = new Schema({
         "type": Number,
         "default": 0
     },
+    "readShortStoryCount": {
+        "type": Number,
+        "default": 0
+    },
     "finishReadingArticles": [String],
     "favoriteArticles": [String],
     "finishReadingShortStories": [String],
@@ -160,6 +164,67 @@ module.exports.updateLikeArticle = function (articleId, userData) {
             { userName: userData.userName },
             { $set: {
                 favoriteArticles: userData.favoriteArticles
+            }}
+        )
+        .exec()
+        .then(() => {
+            resolve(userData);
+        })
+        .catch((err) => {
+            reject("There was an error updating the user: " + err);
+        });
+    });
+}
+
+module.exports.updateMarkAsReadShortStory = function (shortStoryId, userData) {
+    return new Promise((resolve, reject) => {
+        let increaseExp = false;
+        console.log("before Exp: ", userData.exp);
+        increaseExp = addOrDeleteToUniqueArray(userData.finishReadingShortStories, shortStoryId);
+        console.log("increaseExp: ", increaseExp);
+        if(increaseExp){
+            console.log("increaseExp: ", increaseExp);
+            const { userLevel, userExp } = upExp(userData.level, userData.exp);
+            userData.level = userLevel;
+            userData.exp = userExp;
+            console.log("increaseExp: ", increaseExp);
+        } else {
+            console.log("increaseExp: ", increaseExp);
+            const { userLevel, userExp } = downExp(userData.level, userData.exp);
+            userData.level = userLevel;
+            userData.exp = userExp;
+            console.log("increaseExp: ", increaseExp);
+        }
+        console.log("after Exp: ", userData.exp);
+        console.log("Finish Reading Short Stories: ", userData.finishReadingShortStories);
+        userData.readShortStoryCount = printNumbers(userData.finishReadingShortStories);
+        User.updateMany(
+            { userName: userData.userName },
+            { $set: {
+                readShortStoryCount: userData.readShortStoryCount, 
+                finishReadingShortStories: userData.finishReadingShortStories,
+                level: userData.level,
+                exp: userData.exp
+            }}
+        )
+        .exec()
+        .then(() => {
+            resolve(userData);
+        })
+        .catch((err) => {
+            reject("There was an error updating the user: " + err);
+        });
+    });
+}
+
+module.exports.updateLikeShortStory = function (shortStoryId, userData) {
+    return new Promise((resolve, reject) => {
+        addOrDeleteToUniqueArray(userData.favoriteShortStories, shortStoryId);
+        console.log("Liked: ", userData.favoriteShortStories);
+        User.updateOne(
+            { userName: userData.userName },
+            { $set: {
+                favoriteShortStories: userData.favoriteShortStories
             }}
         )
         .exec()
