@@ -267,6 +267,23 @@ app.get("/shortstory/reading/:shortStoryId", function(req, res){
     });
 });
 
+app.get("/shortstory/:shortStoryId", ensureLogin, (req, res) => {
+    dataService.getUpdateShortStoryById(req.params.shortStoryId)
+    .then((data) => {
+        if (data) {
+            res.render("updateShortStory", {
+                shortStory: data
+            });
+        }
+        else{
+            res.status(404).send("Short Story Not Found");
+        }
+    })
+    .catch(() => {
+        res.status(404).send("Short Story Not Found");
+    });
+});
+
 app.get("/dailyrecord", function(req, res){
     let viewData = {};
     dataService.getRecords()
@@ -440,6 +457,16 @@ app.post("/shortStory/action/:shortStoryId", ensureLogin, (req, res) => {
         .catch(() => {
             res.status(500).send("Unable to update Short Story");
         });
+});
+
+app.post("/shortStory/update", ensureLogin, (req, res) => {
+    dataService.updateShortStory(req.body)
+    .then(() => {
+        res.redirect("/shortstories");
+    })
+    .catch(() => {
+        res.status(500).send("unable to update short story");
+    });
 });
 
 app.post("/records/add", ensureLogin, (req, res) => {

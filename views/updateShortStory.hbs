@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{shortStory.shortStoryTitle}} - Short Story: {{shortStory.shortStoryId}}</h2>
+        <hr />
+        <form method="post" action="/shortStory/update">
+            <input id="shortStoryId" name="shortStoryId" type="hidden" value="{{shortStory.shortStoryId}}" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="shortStoryTitle">Short Story Title</label>
+                        <input class="form-control" id="shortStoryTitle" name="shortStoryTitle" type="text" value="{{shortStory.shortStoryTitle}}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="shortStoryContent">Short Story Content</label>
+                        <textarea class="form-control" rows="18" id="shortStoryContent" name="shortStoryContent" type="text">{{{shortStory.shortStoryContent}}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <input type="submit" class="btn btn-primary pull-right" value="Update Short Story" /><br /><br /><br />
+        </form>
+    </div>
+</div>
