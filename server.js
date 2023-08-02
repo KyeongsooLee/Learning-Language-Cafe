@@ -284,6 +284,15 @@ app.get("/shortstory/:shortStoryId", ensureLogin, (req, res) => {
     });
 });
 
+app.get("/shortstory/delete/:shortStoryId", ensureLogin, (req, res) => {
+    dataService.deleteShortStory(req.params.shortStoryId)
+        .then(() => {
+            res.redirect("shortstories");
+        }).catch(() => {
+            res.status(500).send("Unable to Remove Short Story / Short Story not found");
+        });
+});
+
 app.get("/dailyrecord", function(req, res){
     let viewData = {};
     dataService.getRecords()
