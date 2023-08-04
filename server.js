@@ -544,6 +544,10 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/userReadList", ensureLogin, (req, res) => {
+    res.render("userReadList");
+});
+
 app.get("/userHistory", ensureLogin, (req, res) => {
     res.render("userHistory");
 });

@@ -1,0 +1,132 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1>Level {{session.user.level}}</h1>
+        <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{session.user.exp}}" aria-valuemin="0" aria-valuemax="99" style="width: {{session.user.exp}}%">
+                <span class="sr-only">{{session.user.exp}}% Complete</span>
+                <span class="exp-label">{{session.user.exp}} %</span>
+            </div>
+        </div>
+
+        <h2>Articles</h2>
+        <hr />
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        {{!-- <th class="text-center">No</th> --}}
+                        <th class="text-center">Topic</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Like</th>
+                    </tr>
+                </thead>
+                {{#if session.user}}
+                <tbody>
+                    {{#each viewData.articles}}
+                    <tr>
+                        {{!-- <td class="text-center">{{articleId}}</td> --}}
+                        <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
+                        {{#if selected}}
+                            <td class="text-center"><span class="badge badge-success">Read</span></td>
+                        {{else}}
+                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
+                        {{/if}}
+                        {{#if liked}}
+                            <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
+                        {{else}}
+                            <td class="text-center">&nbsp;</td>
+                        {{/if}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+                {{else}}
+                <tbody>
+                    {{#each viewData.articles}}
+                    <tr>
+                        {{!-- <td class="text-center">{{articleId}}</td> --}}
+                        <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
+                        {{#if selected}}
+                            <td class="text-center"><span class="badge badge-success">Read</span></td>
+                        {{else}}
+                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
+                        {{/if}}
+                        <td class="text-center">&nbsp;</td>
+                    </tr>
+                    {{/each}}
+                </tbody> 
+                {{/if}}
+            </table>
+        </div>
+    </div>
+    {{#unless articles}}
+        <div class="col-md-12 text-center">
+            <strong>{{message}}</strong>
+        </div>
+    {{/unless}}
+    <hr />
+    <div class="col-md-12 text-center">
+        <p><strong>Total:</strong> {{viewData.articles.length}}</p>
+    </div>
+
+        <h2>Short Stories</h2>
+        <hr />
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        {{!-- <th class="text-center">No</th> --}}
+                        <th class="text-center">Topic</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Like</th>
+                    </tr>
+                </thead>
+                {{#if session.user}}
+                <tbody>
+                    {{#each viewData.shortStories}}
+                    <tr>
+                        {{!-- <td class="text-center">{{shortStoryId}}</td> --}}
+                        <td class="text-center"><a href="/shortstory/reading/{{shortStoryId}}">{{shortStoryTitle}}</td>
+                        {{#if selected}}
+                            <td class="text-center"><span class="badge badge-success">Read</span></td>
+                        {{else}}
+                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
+                        {{/if}}
+                        {{#if liked}}
+                            <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
+                        {{else}}
+                            <td class="text-center">&nbsp;</td>
+                        {{/if}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+                {{else}}
+                <tbody>
+                    {{#each viewData.shortStories}}
+                    <tr>
+                        {{!-- <td class="text-center">{{shortStoryId}}</td> --}}
+                        <td class="text-center"><a href="/shortstory/reading/{{shortStoryId}}">{{shortStoryTitle}}</td>
+                        {{#if selected}}
+                            <td class="text-center"><span class="badge badge-success">Read</span></td>
+                        {{else}}
+                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
+                        {{/if}}
+                        <td class="text-center">&nbsp;</td>
+                    </tr>
+                    {{/each}}
+                </tbody> 
+                {{/if}}
+            </table>
+        </div>
+    </div>
+    {{#unless shortStories}}
+        <div class="col-md-12 text-center">
+            <strong>{{message}}</strong>
+        </div>
+    {{/unless}}
+    <hr />
+    <div class="col-md-12 text-center">
+        <p><strong>Total:</strong> {{viewData.shortStories.length}}</p>
+    </div>
+
+
+</div>
