@@ -545,7 +545,40 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/userReadList", ensureLogin, (req, res) => {
-    res.render("userReadList");
+    let viewData = {};
+    dataService.getArticles()
+    .then((data) => {
+        viewData.articles = data;
+        
+        if (req.session.user) {
+            viewData.finishReadingArticles = req.session.user.finishReadingArticles;
+            viewData.readCounter = viewData.finishReadingArticles.length;
+            viewData.favoriteArticles = req.session.user.favoriteArticles;
+            for (let i = 0; i < viewData.articles.length; i++) {
+                for (let j = 0; j < viewData.finishReadingArticles.length; j++) {
+                    if (viewData.articles[i].articleId == viewData.finishReadingArticles[j]) {
+                        viewData.articles[i].selected = true;
+                    }
+                }
+                for (let j = 0; j < viewData.favoriteArticles.length; j++) {
+                    if (viewData.articles[i].articleId == viewData.favoriteArticles[j]) {
+                        viewData.articles[i].liked = true;
+                    }
+                }
+            }
+            viewData.level = req.session.user.level;
+            viewData.exp = req.session.user.exp;
+        }
+        if (viewData.articles.length > 0) {
+            res.render("userReadList", {viewData: viewData});
+        }
+        else{
+            res.render("userReadList", {message: "no results"});
+        }
+    })
+    .catch((err) => {
+        res.render("userReadList", {message: "unable to get articles"});
+    })
 });
 
 app.get("/userHistory", ensureLogin, (req, res) => {
