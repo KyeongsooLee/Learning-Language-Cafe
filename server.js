@@ -546,14 +546,18 @@ app.get("/logout", (req, res) => {
 
 app.get("/userReadList", ensureLogin, (req, res) => {
     let viewData = {};
-    dataService.getArticles()
-    .then((data) => {
-        viewData.articles = data;
-        
+
+    Promise.all([dataService.getArticles(), dataService.getShortStories()]) 
+    .then(([articlesData, shortStoriesData]) => {
+        viewData.articles = articlesData;
+        viewData.shortStories = shortStoriesData;
+
         if (req.session.user) {
             viewData.finishReadingArticles = req.session.user.finishReadingArticles;
-            viewData.readCounter = viewData.finishReadingArticles.length;
             viewData.favoriteArticles = req.session.user.favoriteArticles;
+            viewData.finishReadingShortStories = req.session.user.finishReadingShortStories;
+            viewData.favoriteShortStories = req.session.user.favoriteShortStories;
+
             for (let i = 0; i < viewData.articles.length; i++) {
                 for (let j = 0; j < viewData.finishReadingArticles.length; j++) {
                     if (viewData.articles[i].articleId == viewData.finishReadingArticles[j]) {
@@ -566,18 +570,32 @@ app.get("/userReadList", ensureLogin, (req, res) => {
                     }
                 }
             }
+
+            for (let i = 0; i < viewData.shortStories.length; i++) {
+                for (let j = 0; j < viewData.finishReadingShortStories.length; j++) {
+                    if (viewData.shortStories[i].shortStoryId == viewData.finishReadingShortStories[j]) {
+                        viewData.shortStories[i].selected = true;
+                    }
+                }
+                for (let j = 0; j < viewData.favoriteShortStories.length; j++) {
+                    if (viewData.shortStories[i].shortStoryId == viewData.favoriteShortStories[j]) {
+                        viewData.shortStories[i].liked = true;
+                    }
+                }
+            }
+
             viewData.level = req.session.user.level;
             viewData.exp = req.session.user.exp;
         }
-        if (viewData.articles.length > 0) {
+
+        if (viewData.articles.length > 0 || viewData.shortStories.length > 0) {
             res.render("userReadList", {viewData: viewData});
-        }
-        else{
+        } else {
             res.render("userReadList", {message: "no results"});
         }
     })
     .catch((err) => {
-        res.render("userReadList", {message: "unable to get articles"});
+        res.render("userReadList", {message: "unable to get articles or short stories"});
     })
 });
 

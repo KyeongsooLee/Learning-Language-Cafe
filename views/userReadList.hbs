@@ -80,17 +80,13 @@
                 <tbody>
                     {{#each viewData.shortStories}}
                     <tr>
-                        {{!-- <td class="text-center">{{shortStoryId}}</td> --}}
-                        <td class="text-center"><a href="/shortstory/reading/{{shortStoryId}}">{{shortStoryTitle}}</td>
+                        {{!-- <td class="text-center">{{articleId}}</td> --}}
                         {{#if selected}}
+                            <td class="text-center"><a href="/article/reading/{{shortStoryId}}">{{shortStoryTitle}}</td>
                             <td class="text-center"><span class="badge badge-success">Read</span></td>
-                        {{else}}
-                            <td class="text-center"><span class="badge badge-danger">Unread</span></td>
                         {{/if}}
                         {{#if liked}}
                             <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
-                        {{else}}
-                            <td class="text-center">&nbsp;</td>
                         {{/if}}
                     </tr>
                     {{/each}}
@@ -121,7 +117,7 @@
     {{/unless}}
     <hr />
     <div class="col-md-12 text-center">
-        <p><strong>Total:</strong> {{viewData.shortStories.length}}</p>
+        <p><strong>Total:</strong> {{viewData.finishReadingShortStories.length}}</p>
     </div>
 
 
