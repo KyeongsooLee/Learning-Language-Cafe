@@ -28,9 +28,11 @@
                         {{#if selected}}
                             <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
                             <td class="text-center"><span class="badge badge-success">Read</span></td>
-                        {{/if}}
-                        {{#if liked}}
-                            <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
+                            {{#if liked}}
+                                <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
+                            {{else}}
+                                <td class="text-center">&nbsp;</td>
+                            {{/if}}    
                         {{/if}}
                     </tr>
                     {{/each}}
@@ -84,9 +86,11 @@
                         {{#if selected}}
                             <td class="text-center"><a href="/article/reading/{{shortStoryId}}">{{shortStoryTitle}}</td>
                             <td class="text-center"><span class="badge badge-success">Read</span></td>
-                        {{/if}}
-                        {{#if liked}}
-                            <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
+                            {{#if liked}}
+                                <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
+                            {{else}}
+                                <td class="text-center">&nbsp;</td>
+                            {{/if}}
                         {{/if}}
                     </tr>
                     {{/each}}
@@ -119,6 +123,4 @@
     <div class="col-md-12 text-center">
         <p><strong>Total:</strong> {{viewData.finishReadingShortStories.length}}</p>
     </div>
-
-
 </div>
