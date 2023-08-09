@@ -1,6 +1,10 @@
 var fs = require("fs");
-var dataService = require("./data-service.js");
+// var dataService = require("./data-service.js");
 var dataServiceAuth = require("./data-service-auth.js");
+var dataServiceArticles  = require("./controllers/articleController.js");
+var dataServiceRecords = require("./controllers/recordController.js");
+var dataServiceShortStories = require("./controllers/shortStoryController.js");
+var dataServiceIndex = require("./models/index.js");
 var express = require("express");
 var multer = require("multer");
 var exphbs = require("express-handlebars");
@@ -97,7 +101,7 @@ app.get("/images/add", ensureLogin, (req,res) => {
 
 app.get("/articles", function(req, res){
     let viewData = {};
-    dataService.getArticles()
+    dataServiceArticles.getArticles()
     .then((data) => {
         viewData.articles = data;
         
@@ -136,7 +140,7 @@ app.get("/articles/add", ensureLogin, function(req, res) {
 })
 
 app.get("/article/:articleId", ensureLogin, (req, res) => {
-    dataService.getUpdateArticleById(req.params.articleId)
+    dataServiceArticles.getUpdateArticleById(req.params.articleId)
     .then((data) => {
         if (data) {
             res.render("updateArticle", {
@@ -154,7 +158,7 @@ app.get("/article/:articleId", ensureLogin, (req, res) => {
 
 app.get("/article/reading/:articleId", function(req, res){
     let viewData = {};
-    dataService.getArticleById(req.params.articleId)
+    dataServiceArticles.getArticleById(req.params.articleId)
     .then((data) => {
         viewData.article = data;
         if (req.session.user) {
@@ -186,7 +190,7 @@ app.get("/article/reading/:articleId", function(req, res){
 });
 
 app.get("/articles/delete/:articleId", ensureLogin, (req, res) => {
-    dataService.deleteArticleById(req.params.articleId)
+    dataServiceArticles.deleteArticleById(req.params.articleId)
         .then(() => {
             res.redirect("/articles");
         }).catch(() => {
@@ -196,7 +200,7 @@ app.get("/articles/delete/:articleId", ensureLogin, (req, res) => {
 
 app.get("/shortstories", function(req, res){
     let viewData = {};
-    dataService.getShortStories()
+    dataServiceShortStories.getShortStories()
     .then((data) => {
         viewData.shortStories = data;
         
@@ -236,7 +240,7 @@ app.get("/shortstory/add", ensureLogin, function(req, res) {
 
 app.get("/shortstory/reading/:shortStoryId", function(req, res){
     let viewData = {};
-    dataService.getShortStoryById(req.params.shortStoryId)
+    dataServiceShortStories.getShortStoryById(req.params.shortStoryId)
     .then((data) => {
         viewData.shortStory = data;
         if (req.session.user) {
@@ -268,7 +272,7 @@ app.get("/shortstory/reading/:shortStoryId", function(req, res){
 });
 
 app.get("/shortstory/:shortStoryId", ensureLogin, (req, res) => {
-    dataService.getUpdateShortStoryById(req.params.shortStoryId)
+    dataServiceShortStories.getUpdateShortStoryById(req.params.shortStoryId)
     .then((data) => {
         if (data) {
             res.render("updateShortStory", {
@@ -285,7 +289,7 @@ app.get("/shortstory/:shortStoryId", ensureLogin, (req, res) => {
 });
 
 app.get("/shortstory/delete/:shortStoryId", ensureLogin, (req, res) => {
-    dataService.deleteShortStory(req.params.shortStoryId)
+    dataServiceShortStories.deleteShortStory(req.params.shortStoryId)
         .then(() => {
             res.redirect("/shortstories");
         }).catch(() => {
@@ -295,7 +299,7 @@ app.get("/shortstory/delete/:shortStoryId", ensureLogin, (req, res) => {
 
 app.get("/dailyrecord", function(req, res){
     let viewData = {};
-    dataService.getRecords()
+    dataServiceRecords.getRecords()
     .then((data) => {
         viewData.records = data;
         for(let i = 0; i < viewData.records.length ; i++) {
@@ -324,7 +328,7 @@ app.get("/dailyrecord/add", ensureLogin, function(req, res) {
 
 app.get("/record/reading/:recordId", function(req, res){
     let viewData = {};
-    dataService.getRecordById(req.params.recordId)
+    dataServiceRecords.getRecordById(req.params.recordId)
     .then((data) => {
         viewData.record = data;
         if (data) {
@@ -342,7 +346,7 @@ app.get("/record/reading/:recordId", function(req, res){
 });
 
 app.get("/record/:recordId", ensureLogin, (req, res) => {
-    dataService.getUpdateRecordById(req.params.recordId)
+    dataServiceRecords.getUpdateRecordById(req.params.recordId)
     .then((data) => {
         if (data) {
             res.render("updateRecord", {
@@ -359,7 +363,7 @@ app.get("/record/:recordId", ensureLogin, (req, res) => {
 });
 
 app.get("/record/delete/:recordId", ensureLogin, (req, res) => {
-    dataService.deleteRecordById(req.params.recordId)
+    dataServiceRecords.deleteRecordById(req.params.recordId)
         .then(() => {
             res.redirect("/dailyrecord");
         }).catch(() => {
@@ -369,7 +373,7 @@ app.get("/record/delete/:recordId", ensureLogin, (req, res) => {
 
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
-    dataService.addArticle(req.body)
+    dataServiceArticles.addArticle(req.body)
     .then(() => {
         res.redirect("/articles");
     })
@@ -379,7 +383,7 @@ app.post("/articles/add", ensureLogin, (req, res) => {
 });
 
 app.post("/shortStory/add", ensureLogin, (req, res) => {
-    dataService.addShortStory(req.body)
+    dataServiceShortStories.addShortStory(req.body)
     .then(() => {
         res.redirect("/shortstories");
     })
@@ -393,7 +397,7 @@ app.post("/images/add", upload.single("imageFile"), ensureLogin, (req, res) => {
 });
 
 app.post("/article/update", ensureLogin, (req, res) => {
-    dataService.updateArticle(req.body)
+    dataServiceArticles.updateArticle(req.body)
     .then(() => {
         res.redirect("/articles");
     })
@@ -469,7 +473,7 @@ app.post("/shortStory/action/:shortStoryId", ensureLogin, (req, res) => {
 });
 
 app.post("/shortStory/update", ensureLogin, (req, res) => {
-    dataService.updateShortStory(req.body)
+    dataServiceShortStories.updateShortStory(req.body)
     .then(() => {
         res.redirect("/shortstories");
     })
@@ -479,7 +483,7 @@ app.post("/shortStory/update", ensureLogin, (req, res) => {
 });
 
 app.post("/records/add", ensureLogin, (req, res) => {
-    dataService.addRecord(req.body, req.session.user)
+    dataServiceRecords.addRecord(req.body, req.session.user)
     .then(() => {
         res.redirect("/dailyrecord");
     })
@@ -489,7 +493,7 @@ app.post("/records/add", ensureLogin, (req, res) => {
 });
 
 app.post("/record/update", ensureLogin, (req, res) => {
-    dataService.updateRecord(req.body)
+    dataServiceRecords.updateRecord(req.body)
     .then(() => {
         res.redirect("/dailyrecord");
     })
@@ -547,7 +551,7 @@ app.get("/logout", (req, res) => {
 app.get("/userReadList", ensureLogin, (req, res) => {
     let viewData = {};
 
-    Promise.all([dataService.getArticles(), dataService.getShortStories()]) 
+    Promise.all([dataServiceArticles.getArticles(), dataServiceShortStories.getShortStories()]) 
     .then(([articlesData, shortStoriesData]) => {
         viewData.articles = articlesData;
         viewData.shortStories = shortStoriesData;
@@ -607,7 +611,7 @@ app.use((req, res) => {
     res.status(404).send("Page Not Found!");
 });
 
-dataService.initialize()
+dataServiceIndex.initialize()
 .then(dataServiceAuth.initialize)
 .then(() => {
     console.log("start the server");
