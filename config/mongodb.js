@@ -1,7 +1,9 @@
 var mongoose = require("mongoose");
-let User; // to be defined on new connection
+const { userSchema } = require('../models/userModel.js');
 
-module.exports.initialize = function () {
+let User; // to be defined on new connection (see initialize)
+
+function initialize() {
     return new Promise(function (resolve, reject) {
         let db = mongoose.createConnection(`mongodb+srv://${process.env.Mongoose_USERNAME}:${process.env.Mongoose_PASSWORD}@learninglanguagecafe.d8jekqe.mongodb.net/?retryWrites=true&w=majority`, {useNewUrlParser: true});
         db.on('error', (err)=>{
@@ -13,6 +15,7 @@ module.exports.initialize = function () {
         });
     });
 }
+
 module.exports = {
     initialize: initialize,
     User: User

@@ -34,9 +34,6 @@ var userSchema = new Schema({
     }
 });
 
-let User; // to be defined on new connection (see initialize)
-
 module.exports = {
-    userSchema: userSchema,
-    User: User
+    userSchema: userSchema
 };
