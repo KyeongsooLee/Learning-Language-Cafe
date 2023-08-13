@@ -21,7 +21,7 @@ function printNumbers(array) {
 }
 
 function upExp(userLevel, userExp) {
-    let newExp = userExp + 25;
+    let newExp = userExp + 67;
     let newLevel = userLevel;
   
     if (newExp >= 100) {
@@ -33,7 +33,7 @@ function upExp(userLevel, userExp) {
 }
 
 function downExp(userLevel, userExp) {
-    let newExp = userExp - 25;
+    let newExp = userExp - 67;
     let newLevel = userLevel;
   
     if (newExp < 0) {
