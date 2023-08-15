@@ -44,9 +44,17 @@ function downExp(userLevel, userExp) {
     return { userLevel: newLevel, userExp: newExp };
 }
 
+function formatDate(dateTimeStr) {
+  let [date, time] = dateTimeStr.split('T');
+  time = time.substring(0, 8);
+  return `${date} / ${time}`;
+}
+
 module.exports = {
     addOrDeleteToUniqueArray,
     printNumbers,
     upExp,
-    downExp
+    downExp,
+    formatDate
 };
+

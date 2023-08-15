@@ -5,6 +5,7 @@ var dataServiceArticles  = require("./controllers/articleController.js");
 var dataServiceRecords = require("./controllers/recordController.js");
 var dataServiceShortStories = require("./controllers/shortStoryController.js");
 var dataServiceIndex = require("./models/index.js");
+const { formatDate } = require('./helpers/utility');
 var express = require("express");
 var multer = require("multer");
 var exphbs = require("express-handlebars");
@@ -604,7 +605,13 @@ app.get("/userReadList", ensureLogin, (req, res) => {
 });
 
 app.get("/userHistory", ensureLogin, (req, res) => {
-    res.render("userHistory");
+    if (req.session && req.session.user && req.session.user.loginHistory) {
+        req.session.user.loginHistory.forEach(history => {
+            history.dateTime = formatDate(history.dateTime);
+        });
+    }
+    res.render("userHistory", { session: req.session });
+    // res.render("userHistory");
 });
 
 app.use((req, res) => {
