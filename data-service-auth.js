@@ -3,39 +3,6 @@ const { userSchema } = require('./models/userModel.js');
 const bcrypt = require("bcryptjs");
 const { addOrDeleteToUniqueArray, printNumbers, upExp, downExp } = require('./helpers/utility');
 
-// var userSchema = new Schema({
-//     "userName": {
-//         "type": String,
-//         "unique": true,
-//     },
-//     "password": String,
-//     "email": String,
-//     "loginHistory": [{
-//         "dateTime": Date,
-//         "userAgent": String,
-//     }],
-//     "readArticleCount": {
-//         "type": Number,
-//         "default": 0
-//     },
-//     "readShortStoryCount": {
-//         "type": Number,
-//         "default": 0
-//     },
-//     "finishReadingArticles": [String],
-//     "favoriteArticles": [String],
-//     "finishReadingShortStories": [String],
-//     "favoriteShortStories": [String],
-//     "level": {
-//         "type": Number,
-//         "default": 1
-//     },
-//     "exp": {
-//         "type": Number,
-//         "default": 0
-//     }
-// });
-
 let User; // to be defined on new connection (see initialize)
 
 module.exports.initialize = function () {
@@ -237,50 +204,3 @@ module.exports.updateLikeShortStory = function (shortStoryId, userData) {
         });
     });
 }
-
-
-// function addOrDeleteToUniqueArray(array, number) {
-//     let increaseExp = false;
-//     if (!array.includes(number)) {
-//       array.push(number);
-//       increaseExp = true;
-//     } else {
-//       const index = array.indexOf(number);
-//       if (index !== -1) {
-//         array.splice(index, 1);
-//       }
-//     }
-
-//     return increaseExp;
-// }
-
-// function printNumbers(array) {
-//     var count = 0;
-//     for (var i = 0; i < array.length; i++) { count++; }
-//     console.log("Total number: ", count);
-//     return count;
-// }
-
-// function upExp(userLevel, userExp) {
-//     let newExp = userExp + 25;
-//     let newLevel = userLevel;
-  
-//     if (newExp >= 100) {
-//       newExp = newExp - 100;
-//       newLevel = userLevel + 1;
-//     }
-    
-//     return { userLevel: newLevel, userExp: newExp };
-// }
-
-// function downExp(userLevel, userExp) {
-//     let newExp = userExp - 25;
-//     let newLevel = userLevel;
-  
-//     if (newExp < 0) {
-//       newExp = newExp + 100;
-//       newLevel = userLevel - 1;
-//     }
-    
-//     return { userLevel: newLevel, userExp: newExp };
-// }
