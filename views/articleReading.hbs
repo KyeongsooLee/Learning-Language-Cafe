@@ -9,23 +9,6 @@
         
         <div class="text-center">
             <a href="/articles" class="btn btn-primary">Go Back</a>
-            {{!-- {{#if session.user}}
-                <form action="/article/markAsRead/{{viewData.article.articleId}}" method="POST" style="display:inline;">
-                {{#if viewData.article.selected}}
-                    <button type="submit" class="btn btn-info-inverse">Mark as Read</button>
-                {{else}}
-                    <button type="submit" class="btn btn-info">Mark as Read</button>
-                </form>
-                {{/if}}
-                <form action="/article/like/{{viewData.article.articleId}}" method="POST" style="display:inline;">
-                {{#if viewData.article.liked}}
-                    <button type="submit" class="btn btn-warning-inverse">Like</button>
-                {{else}}
-                    <button type="submit" class="btn btn-warning">Like</button>
-                {{/if}}
-                </form>
-                <a class="btn btn-danger pull-right" href="/articles/delete/{{article.articleId}}">Remove</a>
-            {{/if}} --}}
             {{#if session.user}}
                 <form action="/article/action/{{viewData.article.articleId}}" method="POST" style="display:inline;">
                     {{#if viewData.article.selected}}
