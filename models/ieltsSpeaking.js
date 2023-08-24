@@ -9,6 +9,7 @@ const IeltsSpeaking = sequelize.define('IeltsSpeaking', {
     },
     ieltsSpeakingTitle: Sequelize.STRING,
     ieltsSpeakingContent: Sequelize.TEXT,
+    userName: Sequelize.STRING,
 });
 
 module.exports = IeltsSpeaking;

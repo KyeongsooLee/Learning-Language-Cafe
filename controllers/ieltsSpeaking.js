@@ -14,7 +14,7 @@ module.exports.getIeltsSpeaking = function() {
     });
 };
 
-module.exports.addIeltsSpeaking = function (ieltsSpeakingData) {
+module.exports.addIeltsSpeaking = function (ieltsSpeakingData, userData) {
     return new Promise(function (resolve, reject) {
         for (const prop in ieltsSpeakingData) {
             if (ieltsSpeakingData[prop] == "")
@@ -25,6 +25,7 @@ module.exports.addIeltsSpeaking = function (ieltsSpeakingData) {
             ieltsSpeakingId: ieltsSpeakingData.ieltsSpeakingId,
             ieltsSpeakingTitle: ieltsSpeakingData.ieltsSpeakingTitle,
             ieltsSpeakingContent: ieltsSpeakingData.ieltsSpeakingContent,
+            userName: userData.userName,
         })
         .then(() => {
             resolve("New ieltsSpeaking created successfully");
