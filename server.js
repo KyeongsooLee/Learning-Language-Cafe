@@ -4,6 +4,7 @@ var dataServiceAuth = require("./data-service-auth.js");
 var dataServiceArticles  = require("./controllers/articleController.js");
 var dataServiceRecords = require("./controllers/recordController.js");
 var dataServiceShortStories = require("./controllers/shortStoryController.js");
+var dataServiceIeltsSpeaking = require("./controllers/ieltsSpeaking.js");
 var dataServiceIndex = require("./models/index.js");
 const { formatDate } = require('./helpers/utility');
 var express = require("express");
@@ -370,6 +371,31 @@ app.get("/record/delete/:recordId", ensureLogin, (req, res) => {
         }).catch(() => {
             res.status(500).send("Unable to Remove Record / Record not found");
         });
+});
+
+app.get("/ieltsSpeaking", function(req, res){
+    let viewData = {};
+    dataServiceIeltsSpeaking.getIeltsSpeaking()
+    .then((data) => {
+        viewData.ieltsSpeakings = data;
+        for(let i = 0; i < viewData.ieltsSpeakings.length ; i++) {
+            const date = new Date(viewData.ieltsSpeakings[i].createdAt)
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const formattedCreatedAt = `${year}/${month}/${day}`;
+            viewData.ieltsSpeakings[i].createdAt = formattedCreatedAt;
+        }
+        if (viewData.ieltsSpeakings.length > 0) {
+            res.render("ieltsSpeaking", {viewData: viewData});
+        }
+        else{
+            res.render("ieltsSpeaking", {message: "no results"});
+        }
+    })
+    .catch((err) => {
+        res.render("ieltsSpeaking", {message: "unable to get ieltsSpeaking"});
+    })
 });
 
 ////////////////////////////////////////////////////////

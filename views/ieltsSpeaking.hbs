@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1>IELTS Speaking</h1>
+        <h2>Board
+            <a href="/dailyrecord/add" class="btn btn-success pull-right">Add New Speaking Topic</a>
+        </h2>
+        <hr />
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        {{!-- <th class="text-center">No</th> --}}
+                        <th class="text-center">Topic</th>
+                        <th class="text-center">Writer</th>
+                        <th class="text-center">Date</th>
+                    </tr>
+                </thead>
+                {{#if session.user}}
+                <tbody>
+                    {{#each viewData.records}}
+                    <tr>
+                        {{!-- <td class="text-center">{{articleId}}</td> --}}
+                        <td class="text-center"><a href="/record/reading/{{recordId}}">{{recordTitle}}</td>
+                        <td class="text-center"><span class="badge badge-success">{{userName}}</span></td>
+                        <td class="text-center"><span class="badge badge-warning">{{createdAt}}</span></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                {{else}}
+                <tbody>
+                    {{#each viewData.records}}
+                    <tr>
+                        {{!-- <td class="text-center">{{articleId}}</td> --}}
+                        <td class="text-center"><a href="/record/reading/{{recordId}}">{{recordTitle}}</td>
+                        <td class="text-center"><span class="badge badge-success">{{userName}}</span></td>
+                        <td class="text-center"><span class="badge badge-warning">{{createdAt}}</span></td>
+                    </tr>
+                    {{/each}}
+                </tbody> 
+                {{/if}}
+            </table>
+        </div>
+    </div>
+    {{#unless records}}
+        <div class="col-md-12 text-center">
+            <strong>{{message}}</strong>
+        </div>
+    {{/unless}}
+    <hr />
+    <div class="col-md-12 text-center">
+        <p><strong>Total:</strong> {{viewData.records.length}}</p>
+    </div>
+</div>
