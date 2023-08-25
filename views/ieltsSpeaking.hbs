@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <h1>IELTS Speaking</h1>
         <h2>Board
-            <a href="/dailyrecord/add" class="btn btn-success pull-right">Add New Speaking Topic</a>
+            <a href="/ieltsSpeaking/add" class="btn btn-success pull-right">Add New Speaking Topic</a>
         </h2>
         <hr />
         <div class="table-responsive">
@@ -17,10 +17,10 @@
                 </thead>
                 {{#if session.user}}
                 <tbody>
-                    {{#each viewData.records}}
+                    {{#each viewData.ieltsSpeakings}}
                     <tr>
                         {{!-- <td class="text-center">{{articleId}}</td> --}}
-                        <td class="text-center"><a href="/record/reading/{{recordId}}">{{recordTitle}}</td>
+                        <td class="text-center"><a href="/record/reading/{{ieltsSpeakingId}}">{{ieltsSpeakingTitle}}</td>
                         <td class="text-center"><span class="badge badge-success">{{userName}}</span></td>
                         <td class="text-center"><span class="badge badge-warning">{{createdAt}}</span></td>
                     </tr>
@@ -28,10 +28,10 @@
                 </tbody>
                 {{else}}
                 <tbody>
-                    {{#each viewData.records}}
+                    {{#each viewData.ieltsSpeakings}}
                     <tr>
                         {{!-- <td class="text-center">{{articleId}}</td> --}}
-                        <td class="text-center"><a href="/record/reading/{{recordId}}">{{recordTitle}}</td>
+                        <td class="text-center"><a href="/record/reading/{{ieltsSpeakingId}}">{{ieltsSpeakingTitle}}</td>
                         <td class="text-center"><span class="badge badge-success">{{userName}}</span></td>
                         <td class="text-center"><span class="badge badge-warning">{{createdAt}}</span></td>
                     </tr>
@@ -41,13 +41,13 @@
             </table>
         </div>
     </div>
-    {{#unless records}}
+    {{#unless ieltsSpeakings}}
         <div class="col-md-12 text-center">
             <strong>{{message}}</strong>
         </div>
     {{/unless}}
     <hr />
     <div class="col-md-12 text-center">
-        <p><strong>Total:</strong> {{viewData.records.length}}</p>
+        <p><strong>Total:</strong> {{viewData.ieltsSpeakings.length}}</p>
     </div>
 </div>
