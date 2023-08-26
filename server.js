@@ -398,6 +398,10 @@ app.get("/ieltsSpeaking", function(req, res){
     })
 });
 
+app.get("/ieltsSpeaking/add", ensureLogin, function(req, res) {
+    res.render("addIeltsSpeaking");
+})
+
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
     dataServiceArticles.addArticle(req.body)
