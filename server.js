@@ -402,6 +402,25 @@ app.get("/ieltsSpeaking/add", ensureLogin, function(req, res) {
     res.render("addIeltsSpeaking");
 })
 
+app.get("/ieltsSpeaking/reading/:ieltsSpeakingId", function(req, res){
+    let viewData = {};
+    dataServiceIeltsSpeaking.getIeltsSpeakingById(req.params.ieltsSpeakingId)
+    .then((data) => {
+        viewData.ieltsSpeakings = data;
+        if (data) {
+            res.render("ieltsSpeakingReading", {
+                viewData: viewData
+            });
+        }
+        else{
+            res.status(404).send("ieltsSpeaking Not Found");
+        }
+    })
+    .catch(() => {
+        res.status(404).send("ieltsSpeaking Not Found");
+    });
+});
+
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
     dataServiceArticles.addArticle(req.body)
@@ -530,6 +549,16 @@ app.post("/record/update", ensureLogin, (req, res) => {
     })
     .catch(() => {
         res.status(500).send("unable to update record");
+    });
+});
+
+app.post("/ieltsSpeakings/add", ensureLogin, (req, res) => {
+    dataServiceIeltsSpeaking.addIeltsSpeaking(req.body, req.session.user)
+    .then(() => {
+        res.redirect("/ieltsSpeaking");
+    })
+    .catch(() => {
+        res.status(500).send("unable to add ieltsSpeaking");
     });
 });
 ////////////////////////////////////////////////////////
