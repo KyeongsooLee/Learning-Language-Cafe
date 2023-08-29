@@ -438,6 +438,15 @@ app.get("/ieltsSpeaking/:ieltsSpeakingId", ensureLogin, (req, res) => {
     });
 });
 
+app.get("/ieltsSpeaking/delete/:ieltsSpeakingId", ensureLogin, (req, res) => {
+    dataServiceIeltsSpeaking.deleteIeltsSpeaking(req.params.ieltsSpeakingId)
+        .then(() => {
+            res.redirect("/updateIeltsSpeaking");
+        }).catch(() => {
+            res.status(500).send("Unable to Remove Ielts Speaking / Ielts Speaking not found");
+        });
+});
+
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
     dataServiceArticles.addArticle(req.body)
@@ -576,6 +585,16 @@ app.post("/ieltsSpeakings/add", ensureLogin, (req, res) => {
     })
     .catch(() => {
         res.status(500).send("unable to add ieltsSpeaking");
+    });
+});
+
+app.post("/ieltsSpeakings/update", ensureLogin, (req, res) => {
+    dataServiceIeltsSpeaking.updateIeltsSpeaking(req.body)
+    .then(() => {
+        res.redirect("/ieltsSpeaking");
+    })
+    .catch(() => {
+        res.status(500).send("unable to update ieltsSpeaking");
     });
 });
 ////////////////////////////////////////////////////////
