@@ -421,6 +421,23 @@ app.get("/ieltsSpeaking/reading/:ieltsSpeakingId", function(req, res){
     });
 });
 
+app.get("/ieltsSpeaking/:ieltsSpeakingId", ensureLogin, (req, res) => {
+    dataServiceIeltsSpeaking.getUpdateIeltsSpeakingById(req.params.ieltsSpeakingId)
+    .then((data) => {
+        if (data) {
+            res.render("updateIeltsSpeaking", {
+                ieltsSpeaking: data
+            });
+        }
+        else{
+            res.status(404).send("IeltsSpeaking Not Found");
+        }
+    })
+    .catch(() => {
+        res.status(404).send("IeltsSpeaking Not Found");
+    });
+});
+
 ////////////////////////////////////////////////////////
 app.post("/articles/add", ensureLogin, (req, res) => {
     dataServiceArticles.addArticle(req.body)
