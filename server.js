@@ -441,7 +441,7 @@ app.get("/ieltsSpeaking/:ieltsSpeakingId", ensureLogin, (req, res) => {
 app.get("/ieltsSpeaking/delete/:ieltsSpeakingId", ensureLogin, (req, res) => {
     dataServiceIeltsSpeaking.deleteIeltsSpeaking(req.params.ieltsSpeakingId)
         .then(() => {
-            res.redirect("/updateIeltsSpeaking");
+            res.redirect("/ieltsSpeaking");
         }).catch(() => {
             res.status(500).send("Unable to Remove Ielts Speaking / Ielts Speaking not found");
         });
@@ -588,7 +588,7 @@ app.post("/ieltsSpeakings/add", ensureLogin, (req, res) => {
     });
 });
 
-app.post("/ieltsSpeakings/update", ensureLogin, (req, res) => {
+app.post("/ieltsSpeaking/update", ensureLogin, (req, res) => {
     dataServiceIeltsSpeaking.updateIeltsSpeaking(req.body)
     .then(() => {
         res.redirect("/ieltsSpeaking");

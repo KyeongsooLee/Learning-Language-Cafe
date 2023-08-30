@@ -1,16 +1,16 @@
 <div class="row">
     <div class="col-md-12">
         <h2>{{viewData.ieltsSpeakings.ieltsSpeakingTitle}}
-            <a class="btn btn-success pull-right" href="/ieltsSpeaing/{{viewData.ieltsSpeakings.ieltsSpeakingId}}">Update</a>
+            <a class="btn btn-success pull-right" href="/ieltsSpeaking/{{viewData.ieltsSpeakings.ieltsSpeakingId}}">Update</a>
         </h2>
         <hr />
         <p>{{{viewData.ieltsSpeakings.ieltsSpeakingContent}}}</p>
         <hr />
         
         <div class="text-center">
-            <a href="/ieltsSpeaing" class="btn btn-primary">Go Back</a>
+            <a href="/ieltsSpeaking" class="btn btn-primary">Go Back</a>
             {{#if session.user}}
-                <a class="btn btn-danger pull-right" href="/ieltsSpeaing/delete/{{viewData.ieltsSpeakings.ieltsSpeakingId}}" onclick="return confirmDelete('{{viewData.ieltsSpeakings.ieltsSpeakingId}}')">Remove</a>
+                <a class="btn btn-danger pull-right" href="/ieltsSpeaking/delete/{{viewData.ieltsSpeakings.ieltsSpeakingId}}" onclick="return confirmDelete('{{viewData.ieltsSpeakings.ieltsSpeakingId}}')">Remove</a>
             {{/if}}
         </div>
     </div>
