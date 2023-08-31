@@ -242,35 +242,41 @@ app.get("/shortstory/add", ensureLogin, function(req, res) {
 
 app.get("/shortstory/reading/:shortStoryId", function(req, res){
     let viewData = {};
-    dataServiceShortStories.getShortStoryById(req.params.shortStoryId)
-    .then((data) => {
-        viewData.shortStory = data;
-        if (req.session.user) {
-            viewData.finishReadingShortStories = req.session.user.finishReadingShortStories;
-            viewData.favoriteShortStories = req.session.user.favoriteShortStories;
-            for (let j = 0; j < viewData.finishReadingShortStories.length; j++) {
-                if (viewData.shortStory.shortStoryId == viewData.finishReadingShortStories[j]) {
-                    viewData.shortStory.selected = true;
+    if(req.session.user.level < 2){
+        msg = "Your level should be at least 2 to read stories!";
+        res.redirect("/shortstories", msg);
+    } 
+    else{
+        dataServiceShortStories.getShortStoryById(req.params.shortStoryId)
+        .then((data) => {
+            viewData.shortStory = data;
+            if (req.session.user) {
+                viewData.finishReadingShortStories = req.session.user.finishReadingShortStories;
+                viewData.favoriteShortStories = req.session.user.favoriteShortStories;
+                for (let j = 0; j < viewData.finishReadingShortStories.length; j++) {
+                    if (viewData.shortStory.shortStoryId == viewData.finishReadingShortStories[j]) {
+                        viewData.shortStory.selected = true;
+                    }
+                }
+                for (let j = 0; j < viewData.favoriteShortStories.length; j++) {
+                    if (viewData.shortStory.shortStoryId == viewData.favoriteShortStories[j]) {
+                        viewData.shortStory.liked = true;
+                    }
                 }
             }
-            for (let j = 0; j < viewData.favoriteShortStories.length; j++) {
-                if (viewData.shortStory.shortStoryId == viewData.favoriteShortStories[j]) {
-                    viewData.shortStory.liked = true;
-                }
+            if (data) {
+                res.render("shortStoryReading", {
+                    viewData: viewData
+                });
             }
-        }
-        if (data) {
-            res.render("shortStoryReading", {
-                viewData: viewData
-            });
-        }
-        else{
+            else{
+                res.status(404).send("Short Story Not Found");
+            }
+        })
+        .catch(() => {
             res.status(404).send("Short Story Not Found");
-        }
-    })
-    .catch(() => {
-        res.status(404).send("Short Story Not Found");
-    });
+        });
+    }
 });
 
 app.get("/shortstory/:shortStoryId", ensureLogin, (req, res) => {

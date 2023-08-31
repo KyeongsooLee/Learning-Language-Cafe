@@ -6,8 +6,12 @@
                 <span class="sr-only">{{viewData.exp}}% Complete</span>
                 <span class="exp-label">{{viewData.exp}} %</span>
             </div>
-            
         </div>
+        {{#if msg}}
+        <div class="alert alert-danger"> 
+            <strong>Error:</strong> {{msg}}
+        </div>
+        {{/if}}
         <h2>Short Stories
             <a href="/shortstory/add" class="btn btn-success pull-right">Add New Short Story</a>
         </h2>
