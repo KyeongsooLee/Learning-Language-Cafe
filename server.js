@@ -241,6 +241,10 @@ app.get("/shortstories", function(req, res){
 });
 
 app.get("/shortstory/add", ensureLogin, function(req, res) {
+    if(req.session.user.level < 2){
+        req.session.msg = "Your level should be at least 2 to add stories!";
+        res.redirect("/shortstories");
+    }
     res.render("addShortStory");
 });
 
