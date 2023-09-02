@@ -205,6 +205,10 @@ app.get("/shortstories", function(req, res){
     dataServiceShortStories.getShortStories()
     .then((data) => {
         viewData.shortStories = data;
+        if (req.session.msg) {
+            viewData.msg = req.session.msg;
+            req.session.msg = null; // Reset the message after using it
+        }
         
         if (req.session.user) {
             viewData.finishReadingShortStories = req.session.user.finishReadingShortStories;
@@ -243,8 +247,8 @@ app.get("/shortstory/add", ensureLogin, function(req, res) {
 app.get("/shortstory/reading/:shortStoryId", function(req, res){
     let viewData = {};
     if(req.session.user.level < 2){
-        msg = "Your level should be at least 2 to read stories!";
-        res.redirect("/shortstories", msg);
+        req.session.msg = "Your level should be at least 2 to read stories!";
+        res.redirect("/shortstories");
     } 
     else{
         dataServiceShortStories.getShortStoryById(req.params.shortStoryId)
