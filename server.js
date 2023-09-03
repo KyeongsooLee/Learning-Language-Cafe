@@ -392,6 +392,10 @@ app.get("/ieltsSpeaking", function(req, res){
     dataServiceIeltsSpeaking.getIeltsSpeaking()
     .then((data) => {
         viewData.ieltsSpeakings = data;
+        if (req.session.msg) {
+            viewData.msg = req.session.msg;
+            req.session.msg = null; // Reset the message after using it
+        }
         for(let i = 0; i < viewData.ieltsSpeakings.length ; i++) {
             const date = new Date(viewData.ieltsSpeakings[i].createdAt)
             const year = date.getFullYear();
@@ -413,26 +417,36 @@ app.get("/ieltsSpeaking", function(req, res){
 });
 
 app.get("/ieltsSpeaking/add", ensureLogin, function(req, res) {
+    if(req.session.user.level < 2){
+        req.session.msg = "Your level should be at least 2 to add contents!";
+        res.redirect("/ieltsSpeaking");
+    }
     res.render("addIeltsSpeaking");
 })
 
 app.get("/ieltsSpeaking/reading/:ieltsSpeakingId", function(req, res){
     let viewData = {};
-    dataServiceIeltsSpeaking.getIeltsSpeakingById(req.params.ieltsSpeakingId)
-    .then((data) => {
-        viewData.ieltsSpeakings = data;
-        if (data) {
-            res.render("ieltsSpeakingReading", {
-                viewData: viewData
-            });
-        }
-        else{
+    if(req.session.user.level < 2){
+        req.session.msg = "Your level should be at least 2 to read contents!";
+        res.redirect("/ieltsSpeaking");
+    } 
+    else {
+        dataServiceIeltsSpeaking.getIeltsSpeakingById(req.params.ieltsSpeakingId)
+        .then((data) => {
+            viewData.ieltsSpeakings = data;
+            if (data) {
+                res.render("ieltsSpeakingReading", {
+                    viewData: viewData
+                });
+            }
+            else{
+                res.status(404).send("ieltsSpeaking Not Found");
+            }
+        })
+        .catch(() => {
             res.status(404).send("ieltsSpeaking Not Found");
-        }
-    })
-    .catch(() => {
-        res.status(404).send("ieltsSpeaking Not Found");
-    });
+        });
+    }
 });
 
 app.get("/ieltsSpeaking/:ieltsSpeakingId", ensureLogin, (req, res) => {
