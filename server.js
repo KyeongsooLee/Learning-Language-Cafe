@@ -404,6 +404,8 @@ app.get("/ieltsSpeaking", function(req, res){
             const formattedCreatedAt = `${year}/${month}/${day}`;
             viewData.ieltsSpeakings[i].createdAt = formattedCreatedAt;
         }
+        viewData.level = req.session.user.level;
+        viewData.exp = req.session.user.exp;
         if (viewData.ieltsSpeakings.length > 0) {
             res.render("ieltsSpeaking", {viewData: viewData});
         }
