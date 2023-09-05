@@ -248,7 +248,7 @@ app.get("/shortstory/add", ensureLogin, function(req, res) {
     res.render("addShortStory");
 });
 
-app.get("/shortstory/reading/:shortStoryId", function(req, res){
+app.get("/shortstory/reading/:shortStoryId", ensureLogin, function(req, res){
     let viewData = {};
     if(req.session.user.level < 2){
         req.session.msg = "Your level should be at least 2 to read stories!";
@@ -404,8 +404,10 @@ app.get("/ieltsSpeaking", function(req, res){
             const formattedCreatedAt = `${year}/${month}/${day}`;
             viewData.ieltsSpeakings[i].createdAt = formattedCreatedAt;
         }
-        viewData.level = req.session.user.level;
-        viewData.exp = req.session.user.exp;
+        if (req.session.user) {
+            viewData.level = req.session.user.level;
+            viewData.exp = req.session.user.exp;
+        }
         if (viewData.ieltsSpeakings.length > 0) {
             res.render("ieltsSpeaking", {viewData: viewData});
         }
