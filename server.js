@@ -428,7 +428,7 @@ app.get("/ieltsSpeaking/add", ensureLogin, function(req, res) {
     res.render("addIeltsSpeaking");
 })
 
-app.get("/ieltsSpeaking/reading/:ieltsSpeakingId", function(req, res){
+app.get("/ieltsSpeaking/reading/:ieltsSpeakingId", ensureLogin, function(req, res){
     let viewData = {};
     if(req.session.user.level < 2){
         req.session.msg = "Your level should be at least 2 to read contents!";
