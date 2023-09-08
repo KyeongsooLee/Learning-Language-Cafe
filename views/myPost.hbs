@@ -16,24 +16,17 @@
                     <tr>
                         {{!-- <th class="text-center">No</th> --}}
                         <th class="text-center">Topic</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Like</th>
+                        <th class="text-center">Writer</th>
+                        <th class="text-center">Date</th>
                     </tr>
                 </thead>
                 {{#if session.user}}
                 <tbody>
-                    {{#each viewData.articles}}
+                    {{#each viewData.userRecords}}
                     <tr>
-                        {{!-- <td class="text-center">{{articleId}}</td> --}}
-                        {{#if selected}}
-                            <td class="text-center"><a href="/article/reading/{{articleId}}">{{articleTitle}}</td>
-                            <td class="text-center"><span class="badge badge-success">Read</span></td>
-                            {{#if liked}}
-                                <td class="text-center"><span class="badge badge-warning">Liked!</span></td>
-                            {{else}}
-                                <td class="text-center">&nbsp;</td>
-                            {{/if}}    
-                        {{/if}}
+                        <td class="text-center"><a href="/record/reading/{{recordId}}">{{recordTitle}}</td>
+                        <td class="text-center"><span class="badge badge-success">{{userName}}</span></td>
+                        <td class="text-center"><span class="badge badge-warning">{{createdAt}}</span></td>   
                     </tr>
                     {{/each}}
                 </tbody>
@@ -41,7 +34,7 @@
             </table>
         </div>
     </div>
-    {{#unless articles}}
+    {{#unless records}}
         <div class="col-md-12 text-center">
             <strong>{{message}}</strong>
         </div>

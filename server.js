@@ -678,11 +678,31 @@ app.get("/logout", (req, res) => {
 
 app.get("/myPost", ensureLogin, (req, res) => {
     let viewData = {};
-    if (viewData.articles.length > 0 || viewData.shortStories.length > 0) {
-        res.render("userReadList", {viewData: viewData});
-    } else {
-        res.render("userReadList", {message: "no results"});
-    }    
+    Promise.all([dataServiceRecords.getRecords(), dataServiceIeltsSpeaking.getIeltsSpeaking()]) 
+    .then(([recordsData, ieltsSpeakingsData]) => {
+        viewData.records = recordsData;
+        viewData.ieltsSpeakings = ieltsSpeakingsData;
+        console.log(recordsData);
+        for (let i = 0; i < viewData.records.length; i++) {
+            if (viewData.records[i].userName == req.session.user.userName){
+                viewData.userRecordsId = viewData.records[i].recordId;
+            }
+        }
+        console.log(viewData.userRecordsId);
+        if (req.session.user) {
+            viewData.level = req.session.user.level;
+            viewData.exp = req.session.user.exp;
+        }
+
+        if (viewData.userRecordsId.length > 0 || viewData.ieltsSpeakings.length > 0) {
+            res.render("myPost", {viewData: viewData});
+        } else {
+            res.render("myPost", {message: "no results"});
+        }
+    })
+    .catch((err) => {
+        res.render("myPost", {message: "unable to get my Posts"});
+    })
 });
 
 app.get("/userReadList", ensureLogin, (req, res) => {
