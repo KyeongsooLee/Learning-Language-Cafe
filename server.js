@@ -676,6 +676,15 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/myPost", ensureLogin, (req, res) => {
+    let viewData = {};
+    if (viewData.articles.length > 0 || viewData.shortStories.length > 0) {
+        res.render("userReadList", {viewData: viewData});
+    } else {
+        res.render("userReadList", {message: "no results"});
+    }    
+});
+
 app.get("/userReadList", ensureLogin, (req, res) => {
     let viewData = {};
 
