@@ -680,21 +680,18 @@ app.get("/myPost", ensureLogin, (req, res) => {
     let viewData = {};
     Promise.all([dataServiceRecords.getRecords(), dataServiceIeltsSpeaking.getIeltsSpeaking()]) 
     .then(([recordsData, ieltsSpeakingsData]) => {
-        viewData.records = recordsData;
         viewData.ieltsSpeakings = ieltsSpeakingsData;
-        console.log(recordsData);
-        for (let i = 0; i < viewData.records.length; i++) {
-            if (viewData.records[i].userName == req.session.user.userName){
-                viewData.userRecordsId = viewData.records[i].recordId;
-            }
-        }
-        console.log(viewData.userRecordsId);
+        console.log(req.session.user.userName);
+
+        viewData.records = recordsData.filter(record => record.userName == req.session.user.userName);
+
+        console.log(viewData.records);
         if (req.session.user) {
             viewData.level = req.session.user.level;
             viewData.exp = req.session.user.exp;
         }
 
-        if (viewData.userRecordsId.length > 0 || viewData.ieltsSpeakings.length > 0) {
+        if (viewData.records.length > 0 || viewData.ieltsSpeakings.length > 0) {
             res.render("myPost", {viewData: viewData});
         } else {
             res.render("myPost", {message: "no results"});
