@@ -680,12 +680,8 @@ app.get("/myPost", ensureLogin, (req, res) => {
     let viewData = {};
     Promise.all([dataServiceRecords.getRecords(), dataServiceIeltsSpeaking.getIeltsSpeaking()]) 
     .then(([recordsData, ieltsSpeakingsData]) => {
-        viewData.ieltsSpeakings = ieltsSpeakingsData;
-        console.log(req.session.user.userName);
-
         viewData.records = recordsData.filter(record => record.userName == req.session.user.userName);
-
-        console.log(viewData.records);
+        viewData.ieltsSpeakings = ieltsSpeakingsData.filter(ieltsSpeaking => ieltsSpeaking.userName == req.session.user.userName);
         if (req.session.user) {
             viewData.level = req.session.user.level;
             viewData.exp = req.session.user.exp;
