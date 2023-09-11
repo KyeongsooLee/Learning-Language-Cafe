@@ -682,6 +682,22 @@ app.get("/myPost", ensureLogin, (req, res) => {
     .then(([recordsData, ieltsSpeakingsData]) => {
         viewData.records = recordsData.filter(record => record.userName == req.session.user.userName);
         viewData.ieltsSpeakings = ieltsSpeakingsData.filter(ieltsSpeaking => ieltsSpeaking.userName == req.session.user.userName);
+        for(let i = 0; i < viewData.records.length ; i++) {
+            const date = new Date(viewData.records[i].createdAt)
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const formattedCreatedAt = `${year}/${month}/${day}`;
+            viewData.records[i].createdAt = formattedCreatedAt;
+        }
+        for(let i = 0; i < viewData.ieltsSpeakings.length ; i++) {
+            const date = new Date(viewData.ieltsSpeakings[i].createdAt)
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const formattedCreatedAt = `${year}/${month}/${day}`;
+            viewData.ieltsSpeakings[i].createdAt = formattedCreatedAt;
+        }
         if (req.session.user) {
             viewData.level = req.session.user.level;
             viewData.exp = req.session.user.exp;
