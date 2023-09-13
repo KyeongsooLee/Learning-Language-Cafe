@@ -103,7 +103,10 @@ app.get("/images/add", ensureLogin, (req,res) => {
 
 app.get("/articles", function(req, res){
     let viewData = {};
-    dataServiceArticles.getArticles()
+    let pageNum = req.query.page || 1; 
+    const itemsPerPage = 10;
+    let offset = (pageNum - 1) * itemsPerPage;
+    dataServiceArticles.getArticlesWithLimitAndOffset(itemsPerPage, offset)
     .then((data) => {
         viewData.articles = data;
         

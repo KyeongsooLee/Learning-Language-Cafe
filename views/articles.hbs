@@ -68,5 +68,19 @@
     <hr />
     <div class="col-md-12 text-center">
         <p><strong>Total:</strong> {{viewData.articles.length}}</p>
+        <p><strong>Total:</strong> {{viewData.articles.length}}</p>
+    </div>
+    <div class="col-md-12 text-center">
+        <button data-page="1" class="pagination-button">1</button>
+        <button data-page="2" class="pagination-button">2</button>
     </div>
 </div>
+
+    <script>
+        document.querySelectorAll('.pagination-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const page = this.getAttribute('data-page');
+                window.location.href = `/articles?page=${page}`;
+            });
+        });
+    </script>
