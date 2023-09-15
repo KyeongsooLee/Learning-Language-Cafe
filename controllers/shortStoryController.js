@@ -1,9 +1,25 @@
 const ShortStory = require('../models/shortStory');
-
-module.exports.getShortStories = function() {
+module.exports.getArticlesWithLimitAndOffset = function(limit, offset) {
+    return new Promise(function (resolve, reject) {
+        Article.findAll({
+            order: [['articleId', 'ASC']],  // Sort articles in ascending order by articleId
+            limit: limit,
+            offset: offset
+        })
+        .then((data) => {
+            resolve(data);
+        })
+        .catch(() => {
+            reject("no results returned");
+        });
+    });
+};
+module.exports.getShortStoriesWithLimitAndOffset = function(limit, offset) {
     return new Promise(function (resolve, reject) {
         ShortStory.findAll({
-            order: [['shortStoryId', 'ASC']] // Sort articles in ascending order by articleId
+            order: [['shortStoryId', 'ASC']], // Sort shortStories in ascending order by shortStoryId
+            limit: limit,
+            offset: offset
         })
         .then((data) => {
             resolve(data);

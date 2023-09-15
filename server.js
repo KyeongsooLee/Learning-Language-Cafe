@@ -205,7 +205,10 @@ app.get("/articles/delete/:articleId", ensureLogin, (req, res) => {
 
 app.get("/shortstories", function(req, res){
     let viewData = {};
-    dataServiceShortStories.getShortStories()
+    let pageNum = req.query.page || 1; 
+    const itemsPerPage = 10;
+    let offset = (pageNum - 1) * itemsPerPage;
+    dataServiceShortStories.getShortStoriesWithLimitAndOffset(itemsPerPage, offset)
     .then((data) => {
         viewData.shortStories = data;
         if (req.session.msg) {
