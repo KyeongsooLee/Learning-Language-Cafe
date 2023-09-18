@@ -1,19 +1,5 @@
 const ShortStory = require('../models/shortStory');
-module.exports.getArticlesWithLimitAndOffset = function(limit, offset) {
-    return new Promise(function (resolve, reject) {
-        Article.findAll({
-            order: [['articleId', 'ASC']],  // Sort articles in ascending order by articleId
-            limit: limit,
-            offset: offset
-        })
-        .then((data) => {
-            resolve(data);
-        })
-        .catch(() => {
-            reject("no results returned");
-        });
-    });
-};
+
 module.exports.getShortStoriesWithLimitAndOffset = function(limit, offset) {
     return new Promise(function (resolve, reject) {
         ShortStory.findAll({

@@ -684,6 +684,7 @@ app.get("/logout", (req, res) => {
 
 app.get("/myPost", ensureLogin, (req, res) => {
     let viewData = {};
+
     Promise.all([dataServiceRecords.getRecords(), dataServiceIeltsSpeaking.getIeltsSpeaking()]) 
     .then(([recordsData, ieltsSpeakingsData]) => {
         viewData.records = recordsData.filter(record => record.userName == req.session.user.userName);
@@ -722,8 +723,10 @@ app.get("/myPost", ensureLogin, (req, res) => {
 
 app.get("/userReadList", ensureLogin, (req, res) => {
     let viewData = {};
-
-    Promise.all([dataServiceArticles.getArticles(), dataServiceShortStories.getShortStories()]) 
+    let pageNum = req.query.page || 1; 
+    const itemsPerPage = 10;
+    let offset = (pageNum - 1) * itemsPerPage;
+    Promise.all([dataServiceArticles.getArticlesWithLimitAndOffset(itemsPerPage, offset), dataServiceShortStories.getShortStoriesWithLimitAndOffset(itemsPerPage, offset)]) 
     .then(([articlesData, shortStoriesData]) => {
         viewData.articles = articlesData;
         viewData.shortStories = shortStoriesData;
